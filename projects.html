@@ -1,76 +1,366 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dallas Lucy</title>
-    <link rel="stylesheet" href="styles.css">
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Projects — Dallas Lucy</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700&family=Cinzel:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: #050510;
+      color: #c8b89a;
+      font-family: 'Cinzel', serif;
+      min-height: 100vh;
+    }
+
+    /* ── Navbar ─────────────────────────────────────── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      background: rgba(5, 5, 16, 0.92);
+      border-bottom: 1px solid rgba(232, 180, 90, 0.2);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 48px;
+      height: 64px;
+    }
+
+    .nav-logo {
+      font-family: 'Cinzel Decorative', serif;
+      font-size: 0.9rem;
+      color: #e8b45a;
+      text-decoration: none;
+      letter-spacing: 4px;
+      text-shadow: 0 0 20px rgba(232, 180, 90, 0.4);
+      white-space: nowrap;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 36px;
+      list-style: none;
+    }
+
+    .nav-links a {
+      color: rgba(232, 180, 90, 0.6);
+      text-decoration: none;
+      font-size: 0.65rem;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      transition: color 0.25s, text-shadow 0.25s;
+    }
+
+    .nav-links a:hover,
+    .nav-links a.active {
+      color: #e8b45a;
+      text-shadow: 0 0 14px rgba(232, 180, 90, 0.6);
+    }
+
+    /* ── Page Hero ──────────────────────────────────── */
+    .page-hero {
+      padding-top: 120px;
+      padding-bottom: 48px;
+      text-align: center;
+      position: relative;
+    }
+
+    .page-hero::after {
+      content: '';
+      display: block;
+      width: 200px;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, #e8b45a, transparent);
+      margin: 32px auto 0;
+    }
+
+    .page-hero h1 {
+      font-family: 'Cinzel Decorative', serif;
+      font-size: clamp(2rem, 5vw, 3.5rem);
+      color: #e8b45a;
+      letter-spacing: 10px;
+      text-shadow: 0 0 40px rgba(232, 180, 90, 0.45), 0 0 80px rgba(232, 180, 90, 0.15);
+    }
+
+    .page-hero p {
+      margin-top: 14px;
+      font-size: 0.65rem;
+      color: rgba(232, 180, 90, 0.45);
+      letter-spacing: 6px;
+      text-transform: uppercase;
+    }
+
+    /* ── Main content ───────────────────────────────── */
+    main {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 0 32px 120px;
+    }
+
+    /* ── Section headers ────────────────────────────── */
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      margin-bottom: 36px;
+      margin-top: 72px;
+    }
+
+    .section-title h2 {
+      font-family: 'Cinzel Decorative', serif;
+      font-size: 1.1rem;
+      color: #e8b45a;
+      letter-spacing: 6px;
+      white-space: nowrap;
+      text-shadow: 0 0 20px rgba(232, 180, 90, 0.3);
+    }
+
+    .section-title::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: linear-gradient(90deg, rgba(232,180,90,0.35), transparent);
+    }
+
+    /* ── Cards ──────────────────────────────────────── */
+    .card {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(232, 180, 90, 0.12);
+      border-radius: 4px;
+      padding: 32px;
+      margin-bottom: 28px;
+      transition: border-color 0.3s, box-shadow 0.3s;
+    }
+
+    .card:hover {
+      border-color: rgba(232, 180, 90, 0.28);
+      box-shadow: 0 0 30px rgba(232, 180, 90, 0.06);
+    }
+
+    .card p {
+      font-size: 0.78rem;
+      line-height: 1.9;
+      color: rgba(200, 184, 154, 0.75);
+      letter-spacing: 0.5px;
+    }
+
+    /* ── Embed wrappers ─────────────────────────────── */
+    .embed-wrapper {
+      margin-top: 20px;
+      border-radius: 4px;
+      overflow: hidden;
+      border: 1px solid rgba(232, 180, 90, 0.1);
+    }
+
+    .embed-wrapper iframe {
+      display: block;
+      width: 100%;
+    }
+
+    .youtube-wrapper {
+      position: relative;
+      padding-bottom: 56.25%;
+      height: 0;
+    }
+
+    .youtube-wrapper iframe {
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+    }
+
+    /* ── Sub-section labels ─────────────────────────── */
+    .sub-label {
+      font-size: 0.6rem;
+      letter-spacing: 4px;
+      color: rgba(232, 180, 90, 0.5);
+      text-transform: uppercase;
+      margin-bottom: 12px;
+    }
+
+    /* ── Placeholder cards ──────────────────────────── */
+    .placeholder-card {
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px dashed rgba(232, 180, 90, 0.18);
+      border-radius: 4px;
+      padding: 56px 32px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .placeholder-card::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse at center, rgba(232,180,90,0.04) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .placeholder-icon {
+      font-size: 2.4rem;
+      margin-bottom: 20px;
+      filter: grayscale(0.4) opacity(0.6);
+    }
+
+    .placeholder-card h3 {
+      font-family: 'Cinzel Decorative', serif;
+      font-size: 0.85rem;
+      color: rgba(232, 180, 90, 0.5);
+      letter-spacing: 5px;
+      margin-bottom: 10px;
+    }
+
+    .placeholder-card p {
+      font-size: 0.65rem;
+      color: rgba(200, 184, 154, 0.35);
+      letter-spacing: 2px;
+      text-transform: uppercase;
+    }
+
+    /* ── Soundcloud credit ──────────────────────────── */
+    .sc-credit {
+      font-size: 0.6rem;
+      color: rgba(200, 184, 154, 0.3);
+      letter-spacing: 1px;
+      margin-top: 8px;
+      text-align: right;
+    }
+
+    .sc-credit a {
+      color: rgba(232, 180, 90, 0.4);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+
+    .sc-credit a:hover { color: #e8b45a; }
+
+    /* ── Footer ─────────────────────────────────────── */
+    footer {
+      border-top: 1px solid rgba(232, 180, 90, 0.1);
+      text-align: center;
+      padding: 28px;
+      font-size: 0.6rem;
+      color: rgba(232, 180, 90, 0.25);
+      letter-spacing: 3px;
+    }
+  </style>
 </head>
 <body>
-    <header>
-        <nav>
-            <a href="index.html">Home</a>
-            <a href="about-me.html">About Me</a>
-            <a href="projects.html">Projects</a>
-            <a href="blog.html">Blog</a>
-            <a href="contact.html">Contact</a>
-        </nav>
-    </header>
-    <h1 class="center">Welcome to my Project Portfolio</h1>
-    <p class="center">You can find all of my works under their respective sections</p>
-    <section>
-    <h2>Film & Video</h2>
-        <p>Below you will find my first film. This was my final project for an introductuory fiction filmmaking class. Please like and comment your thoughts.</p>
-        <iframe width="560" height="315" src="https://www.youtube.com/embed/3z62UDhlTM0?si=UuoHSI18GbYiCCDT" 
-            title="YouTube video player" 
-            frameborder="0" 
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
-            referrerpolicy="strict-origin-when-cross-origin" 
-            allowfullscreen
-        >
+
+  <!-- ── Navigation ── -->
+  <nav>
+    <a href="index.html" class="nav-logo">Dallas Lucy</a>
+    <ul class="nav-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="projects.html" class="active">Projects</a></li>
+      <li><a href="about-me.html">About</a></li>
+      <li><a href="contact.html">Contact</a></li>
+    </ul>
+  </nav>
+
+  <!-- ── Hero ── -->
+  <div class="page-hero">
+    <h1>Projects</h1>
+    <p>A collection of works across disciplines</p>
+  </div>
+
+  <!-- ── Main ── -->
+  <main>
+
+    <!-- Film & Video -->
+    <div class="section-title"><h2>Film &amp; Video</h2></div>
+    <div class="card">
+      <p class="sub-label">Short Film · 2024</p>
+      <p>My first completed short film — the final project for an introductory fiction filmmaking class. Watch below and feel free to leave your thoughts.</p>
+      <div class="embed-wrapper" style="margin-top: 20px;">
+        <div class="youtube-wrapper">
+          <iframe
+            src="https://www.youtube.com/embed/3z62UDhlTM0?si=UuoHSI18GbYiCCDT"
+            title="Dallas Lucy — Short Film"
+            frameborder="0"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+            referrerpolicy="strict-origin-when-cross-origin"
+            allowfullscreen>
+          </iframe>
+        </div>
+      </div>
+    </div>
+
+    <!-- Photography -->
+    <div class="section-title"><h2>Photography</h2></div>
+    <div class="placeholder-card">
+      <div class="placeholder-icon">📷</div>
+      <h3>Coming Soon</h3>
+      <p>Gallery in progress</p>
+    </div>
+
+    <!-- Music -->
+    <div class="section-title"><h2>Music</h2></div>
+
+    <!-- Beats -->
+    <div class="card">
+      <p class="sub-label">Beats</p>
+      <div class="placeholder-card" style="padding: 40px 32px; margin-top: 0; border-radius: 2px;">
+        <div class="placeholder-icon">🎹</div>
+        <h3>Coming Soon</h3>
+        <p>Beat tape dropping</p>
+      </div>
+    </div>
+
+    <!-- DJ Mixes -->
+    <div class="card">
+      <p class="sub-label">DJ Mixes &amp; Playlists</p>
+      <div class="embed-wrapper" style="margin-top: 12px;">
+        <iframe
+          allow="autoplay *; encrypted-media *;"
+          frameborder="0"
+          height="450"
+          sandbox="allow-forms allow-popups allow-same-origin allow-scripts allow-storage-access-by-user-activation allow-top-navigation-by-user-activation"
+          src="https://embed.music.apple.com/us/playlist/house-dj-set/pl.u-aZb0BX5tP3kr2By">
         </iframe>
-    </section>
-    <h2>Photography</h2>
-    <section>
-        <h2>Music</h2>
-        <p>This section will be split up into 3 categories: beats I produced, my DJ mixes & playlists, and my released music.</p>
-        <h3>Beats</h3> 
-        <section>
-            <h3>DJ Mixes & Playlists</h3>
-            <iframe allow="autoplay *; encrypted-media *;" 
-                frameborder="0" 
-                height="450px" 
-                style="width:100%;max-width:660px;overflow:hidden;background:transparent;" 
-                sandbox="allow-forms allow-popups allow-same-origin allow-scripts allow-storage-access-by-user-activation allow-top-navigation-by-user-activation" 
-                src="https://embed.music.apple.com/us/playlist/house-dj-set/pl.u-aZb0BX5tP3kr2By">
-            </iframe>
-        </section>
-        <section>
-            <h3>Released Music</h3>
-            <iframe width="100%" 
-                style="max-width: 800px;"
-                height="300" 
-                scrolling="no" 
-                frameborder="no" 
-                allow="autoplay" 
-                src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/playlists/soundcloud%253Aplaylists%253A921115213&color=%23868a8b&auto_play=false&hide_related=false&show_comments=true&show_user=true&show_reposts=false&show_teaser=true&visual=true">
-            </iframe>
-            <div style="font-size: 10px; color: #cccccc;line-break: anywhere;word-break: normal;overflow: hidden;white-space: nowrap;text-overflow: ellipsis; font-family: Interstate,Lucida Grande,Lucida Sans Unicode,Lucida Sans,Garuda,Verdana,Tahoma,sans-serif;font-weight: 100;">
-                <a href="https://soundcloud.com/user-423834005-1238198" 
-                    title="Clouted Mar" 
-                    target="_blank" 
-                    style="color: #cccccc; text-decoration: none;">Clouted Mar</a>
-                <a href="https://soundcloud.com/user-423834005-1238198/sets/underrated" 
-                    title="Underrated" 
-                    target="_blank" 
-                    style="color: #cccccc; text-decoration: none;">Underrated</a>
-            </div>
-        </section>
-    </section>
-    <h2>Web Development</h2>
-    </header>
-</body>
-<footer>
+      </div>
+    </div>
+
+    <!-- Released Music -->
+    <div class="card">
+      <p class="sub-label">Released Music — Clouted Mar</p>
+      <div class="embed-wrapper" style="margin-top: 12px;">
+        <iframe
+          height="300"
+          scrolling="no"
+          frameborder="no"
+          allow="autoplay"
+          src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/playlists/soundcloud%253Aplaylists%253A921115213&color=%23e8b45a&auto_play=false&hide_related=false&show_comments=true&show_user=true&show_reposts=false&show_teaser=true&visual=true">
+        </iframe>
+      </div>
+      <p class="sc-credit">
+        <a href="https://soundcloud.com/user-423834005-1238198" target="_blank">Clouted Mar on SoundCloud</a>
+      </p>
+    </div>
+
+    <!-- Web Development -->
+    <div class="section-title"><h2>Web Development</h2></div>
+    <div class="placeholder-card">
+      <div class="placeholder-icon">💻</div>
+      <h3>Coming Soon</h3>
+      <p>Projects being documented</p>
+    </div>
+
+  </main>
+
+  <footer>
     <p>&copy; 2025 Dallas Lucy. All rights reserved.</p>
-</footer>
+  </footer>
+
+</body>
 </html>

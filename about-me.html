@@ -1,25 +1,394 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dallas Lucy</title>
-    <link rel="stylesheet" href="styles.css">
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>About — Dallas Lucy</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700&family=Cinzel:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: #050510;
+      color: #c8b89a;
+      font-family: 'Cinzel', serif;
+      min-height: 100vh;
+    }
+
+    /* ── Navbar ─────────────────────────────────────── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      background: rgba(5, 5, 16, 0.92);
+      border-bottom: 1px solid rgba(232, 180, 90, 0.2);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 48px;
+      height: 64px;
+    }
+
+    .nav-logo {
+      font-family: 'Cinzel Decorative', serif;
+      font-size: 0.9rem;
+      color: #e8b45a;
+      text-decoration: none;
+      letter-spacing: 4px;
+      text-shadow: 0 0 20px rgba(232, 180, 90, 0.4);
+      white-space: nowrap;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 36px;
+      list-style: none;
+    }
+
+    .nav-links a {
+      color: rgba(232, 180, 90, 0.6);
+      text-decoration: none;
+      font-size: 0.65rem;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      transition: color 0.25s, text-shadow 0.25s;
+    }
+
+    .nav-links a:hover,
+    .nav-links a.active {
+      color: #e8b45a;
+      text-shadow: 0 0 14px rgba(232, 180, 90, 0.6);
+    }
+
+    /* ── Page Hero ──────────────────────────────────── */
+    .page-hero {
+      padding-top: 120px;
+      padding-bottom: 48px;
+      text-align: center;
+      position: relative;
+    }
+
+    .page-hero::after {
+      content: '';
+      display: block;
+      width: 200px;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, #e8b45a, transparent);
+      margin: 32px auto 0;
+    }
+
+    .page-hero h1 {
+      font-family: 'Cinzel Decorative', serif;
+      font-size: clamp(2rem, 5vw, 3.5rem);
+      color: #e8b45a;
+      letter-spacing: 10px;
+      text-shadow: 0 0 40px rgba(232, 180, 90, 0.45), 0 0 80px rgba(232, 180, 90, 0.15);
+    }
+
+    .page-hero p {
+      margin-top: 14px;
+      font-size: 0.65rem;
+      color: rgba(232, 180, 90, 0.45);
+      letter-spacing: 6px;
+      text-transform: uppercase;
+    }
+
+    /* ── Main content ───────────────────────────────── */
+    main {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 0 32px 120px;
+    }
+
+    /* ── Section headers ────────────────────────────── */
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      margin-bottom: 36px;
+      margin-top: 72px;
+    }
+
+    .section-title h2 {
+      font-family: 'Cinzel Decorative', serif;
+      font-size: 1.1rem;
+      color: #e8b45a;
+      letter-spacing: 6px;
+      white-space: nowrap;
+      text-shadow: 0 0 20px rgba(232, 180, 90, 0.3);
+    }
+
+    .section-title::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: linear-gradient(90deg, rgba(232,180,90,0.35), transparent);
+    }
+
+    /* ── Cards ──────────────────────────────────────── */
+    .card {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(232, 180, 90, 0.12);
+      border-radius: 4px;
+      padding: 36px;
+      margin-bottom: 28px;
+      transition: border-color 0.3s, box-shadow 0.3s;
+    }
+
+    .card:hover {
+      border-color: rgba(232, 180, 90, 0.28);
+      box-shadow: 0 0 30px rgba(232, 180, 90, 0.06);
+    }
+
+    .card p {
+      font-size: 0.78rem;
+      line-height: 2;
+      color: rgba(200, 184, 154, 0.75);
+      letter-spacing: 0.5px;
+    }
+
+    /* ── Bio card ───────────────────────────────────── */
+    .bio-card {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(232, 180, 90, 0.12);
+      border-radius: 4px;
+      padding: 48px;
+      margin-top: 8px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .bio-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(232,180,90,0.5), transparent);
+    }
+
+    .bio-card p {
+      font-size: 0.82rem;
+      line-height: 2.1;
+      color: rgba(200, 184, 154, 0.8);
+      letter-spacing: 0.5px;
+    }
+
+    .bio-card p + p {
+      margin-top: 20px;
+    }
+
+    /* ── Disciplines grid ───────────────────────────── */
+    .disciplines-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 20px;
+    }
+
+    .discipline-card {
+      background: rgba(255, 255, 255, 0.025);
+      border: 1px solid rgba(232, 180, 90, 0.1);
+      border-radius: 4px;
+      padding: 28px 24px;
+      text-align: center;
+      transition: border-color 0.3s, box-shadow 0.3s, transform 0.3s;
+      cursor: default;
+    }
+
+    .discipline-card:hover {
+      border-color: rgba(232, 180, 90, 0.3);
+      box-shadow: 0 0 24px rgba(232, 180, 90, 0.07);
+      transform: translateY(-3px);
+    }
+
+    .discipline-icon {
+      font-size: 1.8rem;
+      margin-bottom: 16px;
+      display: block;
+      filter: opacity(0.7);
+    }
+
+    .discipline-card h3 {
+      font-family: 'Cinzel', serif;
+      font-size: 0.7rem;
+      color: #e8b45a;
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      margin-bottom: 10px;
+    }
+
+    .discipline-card p {
+      font-size: 0.68rem;
+      color: rgba(200, 184, 154, 0.5);
+      letter-spacing: 0.5px;
+      line-height: 1.7;
+    }
+
+    /* ── Currently section ──────────────────────────── */
+    .currently-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .currently-list li {
+      display: flex;
+      align-items: baseline;
+      gap: 16px;
+      font-size: 0.75rem;
+      color: rgba(200, 184, 154, 0.7);
+      letter-spacing: 0.5px;
+      line-height: 1.7;
+    }
+
+    .currently-list li::before {
+      content: '—';
+      color: rgba(232, 180, 90, 0.4);
+      flex-shrink: 0;
+    }
+
+    .currently-list span {
+      color: rgba(232, 180, 90, 0.7);
+      font-size: 0.6rem;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      margin-right: 4px;
+    }
+
+    /* ── CTA link ───────────────────────────────────── */
+    .cta-row {
+      margin-top: 56px;
+      text-align: center;
+    }
+
+    .cta-link {
+      display: inline-block;
+      color: #e8b45a;
+      text-decoration: none;
+      font-size: 0.65rem;
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      border: 1px solid rgba(232, 180, 90, 0.35);
+      padding: 14px 36px;
+      border-radius: 2px;
+      transition: background 0.25s, box-shadow 0.25s;
+    }
+
+    .cta-link:hover {
+      background: rgba(232, 180, 90, 0.07);
+      box-shadow: 0 0 20px rgba(232, 180, 90, 0.15);
+    }
+
+    /* ── Footer ─────────────────────────────────────── */
+    footer {
+      border-top: 1px solid rgba(232, 180, 90, 0.1);
+      text-align: center;
+      padding: 28px;
+      font-size: 0.6rem;
+      color: rgba(232, 180, 90, 0.25);
+      letter-spacing: 3px;
+    }
+  </style>
 </head>
 <body>
-    <header>
-        <nav>
-            <a href="index.html">Home</a>
-            <a href="about-me.html">About Me</a>
-            <a href="projects.html">Projects</a>
-            <a href="blog.html">Blog</a>
-            <a href="contact.html">Contact</a>
-        </nav>
-    </header>
-    <h1 class="center">About Me</h1>
-</body>
-<footer>
+
+  <!-- ── Navigation ── -->
+  <nav>
+    <a href="index.html" class="nav-logo">Dallas Lucy</a>
+    <ul class="nav-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="projects.html">Projects</a></li>
+      <li><a href="about-me.html" class="active">About</a></li>
+      <li><a href="contact.html">Contact</a></li>
+    </ul>
+  </nav>
+
+  <!-- ── Hero ── -->
+  <div class="page-hero">
+    <h1>About Me</h1>
+    <p>Filmmaker · Musician · Developer</p>
+  </div>
+
+  <!-- ── Main ── -->
+  <main>
+
+    <!-- Bio -->
+    <div class="section-title"><h2>Who I Am</h2></div>
+    <div class="bio-card">
+      <p>
+        I'm Dallas Lucy — a creative based out of [your city], working across film, music, photography, and web development. I make things that feel intentional: visuals that carry weight, sounds that sit in the room with you, and code that doesn't get in the way of the idea.
+      </p>
+      <p>
+        My work as a filmmaker started in school, where I wrote and directed my first short. Music has been a longer thread — producing beats, building DJ sets, and releasing under the name <strong style="color: rgba(232,180,90,0.75);">Clouted Mar</strong>. On the technical side, I build and design websites, with an eye for dark, detail-forward aesthetics inspired by anime and lo-fi culture.
+      </p>
+      <p>
+        Everything I make is connected by the same thing: a refusal to be boring.
+      </p>
+    </div>
+
+    <!-- Disciplines -->
+    <div class="section-title"><h2>What I Do</h2></div>
+    <div class="disciplines-grid">
+
+      <div class="discipline-card">
+        <span class="discipline-icon">🎬</span>
+        <h3>Film & Video</h3>
+        <p>Writing, directing, and editing short-form fiction. Studied introductory filmmaking and continuing to develop a visual language.</p>
+      </div>
+
+      <div class="discipline-card">
+        <span class="discipline-icon">🎵</span>
+        <h3>Music</h3>
+        <p>Beat production, DJ sets, and released music under Clouted Mar. Available on SoundCloud and Apple Music.</p>
+      </div>
+
+      <div class="discipline-card">
+        <span class="discipline-icon">📷</span>
+        <h3>Photography</h3>
+        <p>Visual storytelling through stills. Portfolio coming soon.</p>
+      </div>
+
+      <div class="discipline-card">
+        <span class="discipline-icon">💻</span>
+        <h3>Web Development</h3>
+        <p>Building custom sites with a focus on atmosphere and interaction. Vanilla HTML/CSS/JS with libraries where they earn it.</p>
+      </div>
+
+      <div class="discipline-card">
+        <span class="discipline-icon">✍️</span>
+        <h3>Writing</h3>
+        <p>Ideas in progress. More soon.</p>
+      </div>
+
+    </div>
+
+    <!-- Currently -->
+    <div class="section-title"><h2>Currently</h2></div>
+    <div class="card">
+      <ul class="currently-list">
+        <li><span>Making</span> Beats and working on the next Clouted Mar release</li>
+        <li><span>Building</span> This portfolio — one dark page at a time</li>
+        <li><span>Watching</span> Demon Slayer Infinity Castle arc</li>
+        <li><span>Listening</span> Lo-fi, house, and whatever's in the crate</li>
+      </ul>
+    </div>
+
+    <!-- CTA -->
+    <div class="cta-row">
+      <a href="contact.html" class="cta-link">Get in touch</a>
+    </div>
+
+  </main>
+
+  <footer>
     <p>&copy; 2025 Dallas Lucy. All rights reserved.</p>
-</footer>
+  </footer>
+
+</body>
 </html>
-    
