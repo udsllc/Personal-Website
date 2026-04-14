@@ -698,13 +698,17 @@ function playBiwa() {
 const overlay = document.getElementById('transition-overlay');
 
 function navigateTo(url) {
-  playBiwa();
-  gsap.to(overlay, {
-    opacity: 1,
-    duration: 0.65,
-    ease: 'power2.in',
-    onComplete: () => { window.location.href = url; }
-  });
+  try { playBiwa(); } catch(e) {}
+  // Fallback: always navigate after 750ms regardless of animation state
+  const navTimer = setTimeout(() => { window.location.href = url; }, 750);
+  try {
+    gsap.to(overlay, {
+      opacity: 1,
+      duration: 0.65,
+      ease: 'power2.in',
+      onComplete: () => { clearTimeout(navTimer); window.location.href = url; }
+    });
+  } catch(e) {}
 }
 
 // ─── ATTACH CLICK HANDLERS ─────────────────────────────────────
@@ -713,23 +717,29 @@ document.querySelectorAll('.interactive').forEach(el => {
     const target = this.dataset.target;
     if (!target) return;
 
-    // Quick scale punch on the element
-    gsap.to(this, {
-      scale: 1.06,
-      duration: 0.12,
-      ease: 'power2.out',
-      yoyo: true,
-      repeat: 1,
-      transformOrigin: 'center center',
-      onComplete: () => navigateTo(target)
-    });
+    // Navigate immediately — GSAP punch animation is a bonus, not a gate
+    navigateTo(target);
+
+    // Quick scale punch on the element (best-effort)
+    try {
+      gsap.to(this, {
+        scale: 1.06,
+        duration: 0.12,
+        ease: 'power2.out',
+        yoyo: true,
+        repeat: 1,
+        transformOrigin: 'center center',
+      });
+    } catch(e) {}
   });
 
   // Hover micro-animation
-  el.addEventListener('mouseenter', () =>
-    gsap.to(el, { scale: 1.03, duration: 0.2, ease: 'power2.out', transformOrigin: 'center center' }));
-  el.addEventListener('mouseleave', () =>
-    gsap.to(el, { scale: 1.00, duration: 0.2, ease: 'power2.out' }));
+  el.addEventListener('mouseenter', () => {
+    try { gsap.to(el, { scale: 1.03, duration: 0.2, ease: 'power2.out', transformOrigin: 'center center' }); } catch(e) {}
+  });
+  el.addEventListener('mouseleave', () => {
+    try { gsap.to(el, { scale: 1.00, duration: 0.2, ease: 'power2.out' }); } catch(e) {}
+  });
 });
 
 // ─── INTRO SEQUENCE ────────────────────────────────────────────
