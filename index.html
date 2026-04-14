@@ -1,33 +1,756 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dallas Lucy</title>
-    <link rel="stylesheet" href="styles.css">
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Dallas Lucy</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700&family=Cinzel:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    html, body {
+      width: 100%; height: 100%;
+      background: #050510;
+      overflow: hidden;
+      font-family: 'Cinzel', serif;
+    }
+
+    #scene {
+      width: 100vw; height: 100vh;
+      position: relative;
+    }
+
+    #cafe-svg {
+      width: 100%; height: 100%;
+      position: absolute; top: 0; left: 0;
+    }
+
+    /* ── Interactive SVG groups ─────────────────────── */
+    .interactive {
+      cursor: pointer;
+      transition: filter 0.25s;
+    }
+    .interactive:hover {
+      filter: brightness(1.5) drop-shadow(0 0 10px rgba(232,180,90,0.85));
+    }
+    .item-label {
+      opacity: 0;
+      transition: opacity 0.3s;
+      pointer-events: none;
+      font-family: 'Cinzel', serif;
+    }
+    .interactive:hover .item-label { opacity: 1; }
+
+    /* ── Title overlay ──────────────────────────────── */
+    #title-overlay {
+      position: absolute;
+      top: 38px; left: 50%;
+      transform: translateX(-50%);
+      text-align: center;
+      z-index: 10;
+      pointer-events: none;
+    }
+    #title-overlay h1 {
+      font-family: 'Cinzel Decorative', serif;
+      font-size: clamp(1.6rem, 3.5vw, 3rem);
+      color: #e8b45a;
+      letter-spacing: 8px;
+      text-shadow: 0 0 30px rgba(232,180,90,0.5), 0 0 70px rgba(232,180,90,0.2);
+    }
+    #title-overlay p {
+      font-size: 0.7rem;
+      color: rgba(232,180,90,0.55);
+      letter-spacing: 10px;
+      margin-top: 6px;
+    }
+
+    /* ── Hint text ──────────────────────────────────── */
+    #hint {
+      position: absolute;
+      bottom: 32px; left: 50%;
+      transform: translateX(-50%);
+      color: rgba(232,180,90,0.4);
+      font-size: 0.65rem;
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      z-index: 10;
+      pointer-events: none;
+    }
+
+    /* ── Page transition overlay ────────────────────── */
+    #transition-overlay {
+      position: fixed;
+      inset: 0;
+      background: #050510;
+      z-index: 100;
+      pointer-events: none;
+      opacity: 1;
+    }
+
+    /* ── Pendant lamp flicker ───────────────────────── */
+    @keyframes flicker {
+      0%,89%,91%,93%,100% { opacity: 1; }
+      90%             { opacity: 0.75; }
+      92%             { opacity: 0.9; }
+    }
+    .pendant-glow { animation: flicker 9s ease-in-out infinite; }
+
+    /* ── Laptop cursor blink ───────────────────────── */
+    @keyframes blink { 0%,100%{opacity:0.9} 50%{opacity:0} }
+    .cursor-blink { animation: blink 1.1s step-end infinite; }
+  </style>
 </head>
 <body>
-    <header>
-        <nav>
-            <a href="index.html">Home</a>
-            <a href="about-me.html">About Me</a>
-            <a href="projects.html">Projects</a>
-            <a href="blog.html">Blog</a>
-            <a href="contact.html">Contact</a>
-        </nav>
-    </header>
-    <h1 class="center" style="margin-bottom: 0px;">Welcome to Dallas Lucy</h1>
-    <p class="center" style="font-style: italic; margin-top: 0px;">EST. 2026</p>
-    <p>This is the place where I will share my creative projects and knowledge that I learn throughout life. Feel free to explore. This currently includes:
-        <ul>
-            <li>Web Development</li>
-            <li>Film & Photography</li>
-            <li>Writing</li>
-            <li>Music Production</li>
-        </ul>
-    </p>
-    <footer>
-        <p>&copy; 2025 Dallas Lucy. All rights reserved.</p>
-    </footer>
+
+<div id="scene">
+
+  <!-- ═══════════════════════════════════════════════════════ -->
+  <!--  THE CAFÉ — full SVG illustration                       -->
+  <!-- ═══════════════════════════════════════════════════════ -->
+  <svg id="cafe-svg" viewBox="0 0 1440 900"
+       xmlns="http://www.w3.org/2000/svg"
+       preserveAspectRatio="xMidYMid slice">
+    <defs>
+
+      <!-- Night sky gradient -->
+      <radialGradient id="sky" cx="50%" cy="20%" r="80%">
+        <stop offset="0%"   stop-color="#07072a"/>
+        <stop offset="100%" stop-color="#020209"/>
+      </radialGradient>
+
+      <!-- Floor gradient -->
+      <linearGradient id="floorGrad" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%"   stop-color="#2a1905"/>
+        <stop offset="100%" stop-color="#160e02"/>
+      </linearGradient>
+
+      <!-- Counter gradient -->
+      <linearGradient id="ctrGrad" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%"   stop-color="#3e2608"/>
+        <stop offset="100%" stop-color="#241503"/>
+      </linearGradient>
+
+      <!-- Warm lamp bloom -->
+      <radialGradient id="lampBloom" cx="50%" cy="50%" r="50%">
+        <stop offset="0%"   stop-color="#f5a020" stop-opacity="0.55"/>
+        <stop offset="45%"  stop-color="#e87c10" stop-opacity="0.18"/>
+        <stop offset="100%" stop-color="#e87c10" stop-opacity="0"/>
+      </radialGradient>
+
+      <!-- Screen glow -->
+      <radialGradient id="screenGlow" cx="50%" cy="50%" r="50%">
+        <stop offset="0%"   stop-color="#4a9eff" stop-opacity="0.5"/>
+        <stop offset="100%" stop-color="#4a9eff" stop-opacity="0"/>
+      </radialGradient>
+
+      <!-- DJ LED glow -->
+      <radialGradient id="djGlow" cx="50%" cy="50%" r="50%">
+        <stop offset="0%"   stop-color="#9b59ff" stop-opacity="0.6"/>
+        <stop offset="100%" stop-color="#9b59ff" stop-opacity="0"/>
+      </radialGradient>
+
+      <!-- Wall gradient -->
+      <linearGradient id="wallGrad" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%"   stop-color="#100902"/>
+        <stop offset="100%" stop-color="#1c1208"/>
+      </linearGradient>
+
+      <!-- Blur filters -->
+      <filter id="blur4"><feGaussianBlur stdDeviation="4"/></filter>
+      <filter id="blur10"><feGaussianBlur stdDeviation="10"/></filter>
+      <filter id="blur2"><feGaussianBlur stdDeviation="2"/></filter>
+
+      <!-- Window clip masks -->
+      <clipPath id="win1Clip"><rect x="180" y="88" width="295" height="395"/></clipPath>
+      <clipPath id="win2Clip"><rect x="548" y="88" width="295" height="395"/></clipPath>
+
+    </defs>
+
+    <!-- ──────────────────────────────────────────── -->
+    <!-- 1 · BACKGROUND BASE                          -->
+    <!-- ──────────────────────────────────────────── -->
+    <rect width="1440" height="900" fill="url(#sky)"/>
+
+    <!-- ──────────────────────────────────────────── -->
+    <!-- 2 · BACK WALL                                -->
+    <!-- ──────────────────────────────────────────── -->
+    <rect x="0" y="0" width="1440" height="585" fill="url(#wallGrad)"/>
+
+    <!-- Subtle warm bleed from pendant lights on wall -->
+    <ellipse cx="430" cy="300" rx="200" ry="160"
+             fill="#f5a020" opacity="0.04" filter="url(#blur10)"/>
+    <ellipse cx="720" cy="280" rx="220" ry="180"
+             fill="#f5a020" opacity="0.04" filter="url(#blur10)"/>
+    <ellipse cx="1120" cy="280" rx="200" ry="160"
+             fill="#f5a020" opacity="0.04" filter="url(#blur10)"/>
+
+    <!-- ──────────────────────────────────────────── -->
+    <!-- 3 · WINDOWS (exterior night scene)           -->
+    <!-- ──────────────────────────────────────────── -->
+
+    <!-- WINDOW 1 -->
+    <!-- Outer frame -->
+    <rect x="175" y="83" width="305" height="405" fill="#160e03" rx="3"/>
+    <!-- Glass -->
+    <rect x="180" y="88" width="295" height="395" fill="#03030d"/>
+    <g clip-path="url(#win1Clip)">
+      <!-- Night gradient -->
+      <rect x="180" y="88" width="295" height="395" fill="#04041a"/>
+      <!-- Building silhouettes -->
+      <rect x="183" y="310" width="48" height="173" fill="#060609"/>
+      <rect x="238" y="285" width="35" height="198" fill="#060609"/>
+      <rect x="283" y="325" width="55" height="158" fill="#060609"/>
+      <rect x="350" y="278" width="40" height="205" fill="#060609"/>
+      <rect x="402" y="305" width="50" height="178" fill="#060609"/>
+      <rect x="462" y="292" width="9" height="191" fill="#060609"/>
+      <!-- Windows in buildings (lights) -->
+      <rect x="195" y="318" width="5" height="5" fill="#f5e080" opacity="0.5"/>
+      <rect x="203" y="330" width="5" height="5" fill="#f5e080" opacity="0.4"/>
+      <rect x="215" y="320" width="5" height="5" fill="#f5e080" opacity="0.6"/>
+      <rect x="245" y="295" width="4" height="4" fill="#f5e080" opacity="0.5"/>
+      <rect x="254" y="310" width="4" height="4" fill="#f5e080" opacity="0.3"/>
+      <rect x="360" y="290" width="5" height="5" fill="#f5e080" opacity="0.5"/>
+      <rect x="372" y="305" width="4" height="4" fill="#f5e080" opacity="0.4"/>
+      <rect x="416" y="315" width="5" height="5" fill="#f5e080" opacity="0.35"/>
+      <!-- Rain streaks (static base) -->
+      <line x1="210" y1="88" x2="205" y2="250" stroke="#7aa8e8" stroke-width="0.6" opacity="0.25"/>
+      <line x1="255" y1="88" x2="250" y2="270" stroke="#7aa8e8" stroke-width="0.6" opacity="0.2"/>
+      <line x1="300" y1="88" x2="296" y2="230" stroke="#7aa8e8" stroke-width="0.6" opacity="0.3"/>
+      <line x1="355" y1="88" x2="351" y2="260" stroke="#7aa8e8" stroke-width="0.5" opacity="0.2"/>
+      <line x1="410" y1="88" x2="406" y2="245" stroke="#7aa8e8" stroke-width="0.6" opacity="0.25"/>
+      <line x1="455" y1="88" x2="451" y2="220" stroke="#7aa8e8" stroke-width="0.5" opacity="0.2"/>
+      <!-- Animated rain lines -->
+      <line x1="230" y1="88" x2="225" y2="210" stroke="#7aa8e8" stroke-width="0.8" opacity="0">
+        <animate attributeName="opacity" values="0;0.4;0" dur="2.1s" repeatCount="indefinite"/>
+        <animateTransform attributeName="transform" type="translate" from="0,-88" to="0,295" dur="2.1s" repeatCount="indefinite"/>
+      </line>
+      <line x1="280" y1="88" x2="276" y2="215" stroke="#7aa8e8" stroke-width="0.8" opacity="0">
+        <animate attributeName="opacity" values="0;0.35;0" dur="1.85s" begin="0.4s" repeatCount="indefinite"/>
+        <animateTransform attributeName="transform" type="translate" from="0,-88" to="0,295" dur="1.85s" begin="0.4s" repeatCount="indefinite"/>
+      </line>
+      <line x1="335" y1="88" x2="330" y2="220" stroke="#7aa8e8" stroke-width="0.8" opacity="0">
+        <animate attributeName="opacity" values="0;0.45;0" dur="2.3s" begin="0.9s" repeatCount="indefinite"/>
+        <animateTransform attributeName="transform" type="translate" from="0,-88" to="0,295" dur="2.3s" begin="0.9s" repeatCount="indefinite"/>
+      </line>
+      <line x1="390" y1="88" x2="386" y2="200" stroke="#7aa8e8" stroke-width="0.8" opacity="0">
+        <animate attributeName="opacity" values="0;0.3;0" dur="1.7s" begin="1.2s" repeatCount="indefinite"/>
+        <animateTransform attributeName="transform" type="translate" from="0,-88" to="0,295" dur="1.7s" begin="1.2s" repeatCount="indefinite"/>
+      </line>
+      <line x1="438" y1="88" x2="434" y2="225" stroke="#7aa8e8" stroke-width="0.8" opacity="0">
+        <animate attributeName="opacity" values="0;0.4;0" dur="2.0s" begin="0.6s" repeatCount="indefinite"/>
+        <animateTransform attributeName="transform" type="translate" from="0,-88" to="0,295" dur="2.0s" begin="0.6s" repeatCount="indefinite"/>
+      </line>
+      <!-- Warm glass reflection (interior light on glass) -->
+      <rect x="180" y="88" width="295" height="395" fill="#f5a020" opacity="0.025"/>
+    </g>
+    <!-- Crossbars -->
+    <rect x="175" y="278" width="305" height="7" fill="#160e03"/>
+    <rect x="324" y="83" width="7" height="405" fill="#160e03"/>
+    <!-- Sill -->
+    <rect x="168" y="483" width="319" height="14" fill="#2e1c07" rx="2"/>
+
+    <!-- WINDOW 2 -->
+    <rect x="543" y="83" width="305" height="405" fill="#160e03" rx="3"/>
+    <rect x="548" y="88" width="295" height="395" fill="#03030d"/>
+    <g clip-path="url(#win2Clip)">
+      <rect x="548" y="88" width="295" height="395" fill="#04041a"/>
+      <!-- Building silhouettes -->
+      <rect x="550" y="300" width="50" height="183" fill="#060609"/>
+      <rect x="608" y="278" width="38" height="205" fill="#060609"/>
+      <rect x="657" y="315" width="52" height="168" fill="#060609"/>
+      <rect x="722" y="270" width="42" height="213" fill="#060609"/>
+      <rect x="776" y="298" width="58" height="185" fill="#060609"/>
+      <!-- Building windows -->
+      <rect x="563" y="310" width="5" height="5" fill="#f5e080" opacity="0.5"/>
+      <rect x="573" y="325" width="4" height="4" fill="#f5e080" opacity="0.35"/>
+      <rect x="619" y="290" width="5" height="5" fill="#f5e080" opacity="0.5"/>
+      <rect x="629" y="305" width="4" height="4" fill="#f5e080" opacity="0.4"/>
+      <rect x="668" y="325" width="5" height="5" fill="#f5e080" opacity="0.45"/>
+      <rect x="734" y="282" width="5" height="5" fill="#f5e080" opacity="0.5"/>
+      <rect x="746" y="298" width="4" height="4" fill="#f5e080" opacity="0.3"/>
+      <rect x="789" y="308" width="5" height="5" fill="#f5e080" opacity="0.4"/>
+      <!-- Static rain -->
+      <line x1="565" y1="88" x2="561" y2="240" stroke="#7aa8e8" stroke-width="0.6" opacity="0.2"/>
+      <line x1="610" y1="88" x2="606" y2="260" stroke="#7aa8e8" stroke-width="0.6" opacity="0.25"/>
+      <line x1="660" y1="88" x2="656" y2="235" stroke="#7aa8e8" stroke-width="0.5" opacity="0.2"/>
+      <line x1="715" y1="88" x2="711" y2="255" stroke="#7aa8e8" stroke-width="0.6" opacity="0.3"/>
+      <line x1="765" y1="88" x2="761" y2="240" stroke="#7aa8e8" stroke-width="0.5" opacity="0.2"/>
+      <line x1="812" y1="88" x2="808" y2="220" stroke="#7aa8e8" stroke-width="0.6" opacity="0.25"/>
+      <!-- Animated rain -->
+      <line x1="585" y1="88" x2="580" y2="215" stroke="#7aa8e8" stroke-width="0.8" opacity="0">
+        <animate attributeName="opacity" values="0;0.4;0" dur="2.0s" begin="0.2s" repeatCount="indefinite"/>
+        <animateTransform attributeName="transform" type="translate" from="0,-88" to="0,295" dur="2.0s" begin="0.2s" repeatCount="indefinite"/>
+      </line>
+      <line x1="635" y1="88" x2="631" y2="205" stroke="#7aa8e8" stroke-width="0.8" opacity="0">
+        <animate attributeName="opacity" values="0;0.35;0" dur="2.2s" begin="0.8s" repeatCount="indefinite"/>
+        <animateTransform attributeName="transform" type="translate" from="0,-88" to="0,295" dur="2.2s" begin="0.8s" repeatCount="indefinite"/>
+      </line>
+      <line x1="688" y1="88" x2="684" y2="225" stroke="#7aa8e8" stroke-width="0.8" opacity="0">
+        <animate attributeName="opacity" values="0;0.42;0" dur="1.9s" begin="1.4s" repeatCount="indefinite"/>
+        <animateTransform attributeName="transform" type="translate" from="0,-88" to="0,295" dur="1.9s" begin="1.4s" repeatCount="indefinite"/>
+      </line>
+      <line x1="742" y1="88" x2="738" y2="210" stroke="#7aa8e8" stroke-width="0.8" opacity="0">
+        <animate attributeName="opacity" values="0;0.3;0" dur="2.4s" begin="0.5s" repeatCount="indefinite"/>
+        <animateTransform attributeName="transform" type="translate" from="0,-88" to="0,295" dur="2.4s" begin="0.5s" repeatCount="indefinite"/>
+      </line>
+      <line x1="795" y1="88" x2="791" y2="218" stroke="#7aa8e8" stroke-width="0.8" opacity="0">
+        <animate attributeName="opacity" values="0;0.38;0" dur="1.75s" begin="1.0s" repeatCount="indefinite"/>
+        <animateTransform attributeName="transform" type="translate" from="0,-88" to="0,295" dur="1.75s" begin="1.0s" repeatCount="indefinite"/>
+      </line>
+      <rect x="548" y="88" width="295" height="395" fill="#f5a020" opacity="0.025"/>
+    </g>
+    <rect x="543" y="278" width="305" height="7" fill="#160e03"/>
+    <rect x="692" y="83" width="7" height="405" fill="#160e03"/>
+    <rect x="536" y="483" width="319" height="14" fill="#2e1c07" rx="2"/>
+
+    <!-- Window plants on sills -->
+    <!-- Sill 1 plant -->
+    <rect x="198" y="453" width="24" height="28" fill="#3e2608" rx="3"/>
+    <ellipse cx="210" cy="450" rx="16" ry="11" fill="#1c3c1c"/>
+    <path d="M210,450 Q196,426 183,415" stroke="#28541e" stroke-width="2.5" fill="none"/>
+    <ellipse cx="182" cy="413" rx="9" ry="6" fill="#28541e"/>
+    <path d="M210,450 Q224,424 237,415" stroke="#28541e" stroke-width="2.5" fill="none"/>
+    <ellipse cx="238" cy="413" rx="9" ry="6" fill="#28541e"/>
+    <path d="M210,450 Q210,422 210,408" stroke="#28541e" stroke-width="2.5" fill="none"/>
+    <ellipse cx="210" cy="406" rx="9" ry="6" fill="#325e25"/>
+    <!-- Sill 1 second pot -->
+    <rect x="440" y="455" width="20" height="25" fill="#3e2608" rx="3"/>
+    <ellipse cx="450" cy="452" rx="14" ry="9" fill="#1c3c1c"/>
+    <path d="M450,452 Q450,430 450,418" stroke="#28541e" stroke-width="2" fill="none"/>
+    <path d="M450,435 Q438,425 430,420" stroke="#28541e" stroke-width="2" fill="none"/>
+    <ellipse cx="428" cy="418" rx="7" ry="5" fill="#28541e"/>
+    <path d="M450,435 Q462,425 470,420" stroke="#28541e" stroke-width="2" fill="none"/>
+    <ellipse cx="472" cy="418" rx="7" ry="5" fill="#325e25"/>
+
+    <!-- ──────────────────────────────────────────── -->
+    <!-- 4 · WALL DECOR                               -->
+    <!-- ──────────────────────────────────────────── -->
+
+    <!-- Shelf on right wall -->
+    <rect x="900" y="388" width="30" height="195" fill="#2a1806" rx="2"/>
+    <rect x="896" y="385" width="38" height="7"  fill="#3e2608" rx="2"/>
+
+    <!-- ───── INTERACTIVE: ABOUT ME ─────────────── -->
+    <!-- Framed portrait on wall -->
+    <g class="interactive" id="go-about" data-target="about-me.html">
+      <rect x="882" y="128" width="72" height="88"  fill="#1c1004" rx="2"/>
+      <rect x="887" y="133" width="62" height="78"  fill="#261805"/>
+      <rect x="892" y="138" width="52" height="68"  fill="#1a1208"/>
+      <!-- Silhouette figure -->
+      <circle cx="918" cy="157" r="11" fill="#110c07"/>
+      <path   d="M905,192 Q905,170 918,168 Q931,170 931,192" fill="#110c07"/>
+      <!-- Gold frame corners -->
+      <rect x="882" y="128" width="8" height="8"   fill="#e8b45a" opacity="0.6"/>
+      <rect x="946" y="128" width="8" height="8"   fill="#e8b45a" opacity="0.6"/>
+      <rect x="882" y="208" width="8" height="8"   fill="#e8b45a" opacity="0.6"/>
+      <rect x="946" y="208" width="8" height="8"   fill="#e8b45a" opacity="0.6"/>
+      <!-- Click zone -->
+      <rect x="882" y="128" width="72" height="88" fill="transparent"/>
+      <!-- Label -->
+      <text class="item-label" x="958" y="180" fill="#e8b45a" font-size="11"
+            letter-spacing="2" font-family="Cinzel, serif">ABOUT ME</text>
+    </g>
+
+    <!-- ───── INTERACTIVE: CONTACT ──────────────── -->
+    <!-- Chalkboard -->
+    <g class="interactive" id="go-contact" data-target="contact.html">
+      <rect x="878" y="238" width="92" height="62"  fill="#0a1a12" rx="3"/>
+      <rect x="882" y="242" width="84" height="54"  fill="#0d2018" rx="2"/>
+      <!-- Chalk lines -->
+      <line x1="892" y1="256" x2="956" y2="256" stroke="#ccdccc" stroke-width="1.5" opacity="0.65"/>
+      <line x1="892" y1="266" x2="948" y2="266" stroke="#ccdccc" stroke-width="1.5" opacity="0.45"/>
+      <line x1="892" y1="276" x2="952" y2="276" stroke="#ccdccc" stroke-width="1.5" opacity="0.55"/>
+      <text x="891" y="290" fill="#ccdccc" font-size="8.5" opacity="0.8"
+            font-family="monospace" letter-spacing="1">CONTACT</text>
+      <!-- Click zone -->
+      <rect x="878" y="238" width="92" height="62" fill="transparent"/>
+      <text class="item-label" x="975" y="275" fill="#e8b45a" font-size="11"
+            letter-spacing="2" font-family="Cinzel, serif">CONTACT</text>
+    </g>
+
+    <!-- ───── INTERACTIVE: FILM & VIDEO ─────────── -->
+    <!-- Film strip on wall -->
+    <g class="interactive" id="go-film" data-target="projects.html#film">
+      <rect x="876" y="325" width="92" height="58"  fill="#0c0c0c" rx="3"/>
+      <!-- Sprocket holes left -->
+      <rect x="879" y="329" width="7" height="7"  fill="#1e1e1e" rx="1"/>
+      <rect x="879" y="341" width="7" height="7"  fill="#1e1e1e" rx="1"/>
+      <rect x="879" y="353" width="7" height="7"  fill="#1e1e1e" rx="1"/>
+      <rect x="879" y="365" width="7" height="7"  fill="#1e1e1e" rx="1"/>
+      <!-- Sprocket holes right -->
+      <rect x="958" y="329" width="7" height="7"  fill="#1e1e1e" rx="1"/>
+      <rect x="958" y="341" width="7" height="7"  fill="#1e1e1e" rx="1"/>
+      <rect x="958" y="353" width="7" height="7"  fill="#1e1e1e" rx="1"/>
+      <rect x="958" y="365" width="7" height="7"  fill="#1e1e1e" rx="1"/>
+      <!-- Frame -->
+      <rect x="889" y="328" width="66" height="46" fill="#1c1c0e"/>
+      <!-- Clapperboard inside frame -->
+      <rect x="892" y="331" width="60" height="40" fill="#1a1a1a"/>
+      <rect x="892" y="331" width="60" height="12" fill="#0e0e0e"/>
+      <line x1="903" y1="331" x2="897" y2="343" stroke="#3c3c3c" stroke-width="1.2"/>
+      <line x1="915" y1="331" x2="909" y2="343" stroke="#3c3c3c" stroke-width="1.2"/>
+      <line x1="927" y1="331" x2="921" y2="343" stroke="#3c3c3c" stroke-width="1.2"/>
+      <line x1="939" y1="331" x2="933" y2="343" stroke="#3c3c3c" stroke-width="1.2"/>
+      <!-- Click zone -->
+      <rect x="876" y="325" width="92" height="58" fill="transparent"/>
+      <text class="item-label" x="972" y="360" fill="#e8b45a" font-size="11"
+            letter-spacing="2" font-family="Cinzel, serif">FILM &amp; VIDEO</text>
+    </g>
+
+    <!-- ──────────────────────────────────────────── -->
+    <!-- 5 · FLOOR                                    -->
+    <!-- ──────────────────────────────────────────── -->
+    <rect x="0" y="572" width="1440" height="328" fill="url(#floorGrad)"/>
+    <!-- Plank lines (perspective) -->
+    <line x1="0" y1="585"  x2="1440" y2="585"  stroke="#3d2a10" stroke-width="0.8" opacity="0.35"/>
+    <line x1="0" y1="630"  x2="1440" y2="630"  stroke="#3d2a10" stroke-width="1"   opacity="0.35"/>
+    <line x1="0" y1="690"  x2="1440" y2="690"  stroke="#3d2a10" stroke-width="1.3" opacity="0.35"/>
+    <line x1="0" y1="760"  x2="1440" y2="760"  stroke="#3d2a10" stroke-width="1.7" opacity="0.35"/>
+    <line x1="0" y1="840"  x2="1440" y2="840"  stroke="#3d2a10" stroke-width="2.2" opacity="0.35"/>
+    <!-- Converging verticals -->
+    <line x1="720"  y1="572" x2="720"  y2="900" stroke="#3d2a10" stroke-width="0.8" opacity="0.18"/>
+    <line x1="576"  y1="572" x2="0"    y2="900" stroke="#3d2a10" stroke-width="0.8" opacity="0.18"/>
+    <line x1="864"  y1="572" x2="1440" y2="900" stroke="#3d2a10" stroke-width="0.8" opacity="0.18"/>
+    <line x1="432"  y1="572" x2="0"    y2="810" stroke="#3d2a10" stroke-width="0.8" opacity="0.18"/>
+    <line x1="1008" y1="572" x2="1440" y2="810" stroke="#3d2a10" stroke-width="0.8" opacity="0.18"/>
+
+    <!-- ──────────────────────────────────────────── -->
+    <!-- 6 · CAFÉ COUNTER (right side)               -->
+    <!-- ──────────────────────────────────────────── -->
+    <rect x="965" y="405" width="475" height="220" fill="url(#ctrGrad)" rx="3"/>
+    <!-- Counter top -->
+    <rect x="956" y="393" width="484" height="22"  fill="#3e2608" rx="3"/>
+    <rect x="956" y="393" width="484" height="4"   fill="#5c3a18" rx="2" opacity="0.5"/>
+    <!-- Panel details -->
+    <rect x="978" y="430" width="145" height="175" fill="#211305" rx="2" opacity="0.55"/>
+    <rect x="1138" y="430" width="145" height="175" fill="#211305" rx="2" opacity="0.55"/>
+    <rect x="1298" y="430" width="138" height="175" fill="#211305" rx="2" opacity="0.55"/>
+    <!-- Bar stools -->
+    <rect x="982"  y="580" width="52" height="7" fill="#2a1806" rx="4"/>
+    <rect x="988"  y="587" width="5"  height="58" fill="#1a0e02" rx="2"/>
+    <rect x="1023" y="587" width="5"  height="58" fill="#1a0e02" rx="2"/>
+    <rect x="982"  y="640" width="52" height="5" fill="#160e02" rx="2"/>
+    <rect x="1060" y="580" width="52" height="7" fill="#2a1806" rx="4"/>
+    <rect x="1066" y="587" width="5"  height="58" fill="#1a0e02" rx="2"/>
+    <rect x="1101" y="587" width="5"  height="58" fill="#1a0e02" rx="2"/>
+    <rect x="1060" y="640" width="52" height="5" fill="#160e02" rx="2"/>
+
+    <!-- Coffee machine -->
+    <rect x="1305" y="312" width="68" height="82" fill="#181828" rx="4"/>
+    <rect x="1310" y="317" width="58" height="50" fill="#0f0f20" rx="2"/>
+    <circle cx="1339" cy="342" r="14" fill="#181828" stroke="#48486a" stroke-width="1"/>
+    <circle cx="1339" cy="342" r="9"  fill="#0a0a1a"/>
+    <circle cx="1339" cy="342" r="4"  fill="#181838"/>
+    <circle cx="1334" cy="337" r="1.5" fill="#8ab4f8" opacity="0.55"/>
+    <rect x="1318" y="372" width="38" height="5"  fill="#48486a" rx="2"/>
+    <circle cx="1356" cy="320" r="3.5" fill="#e8b45a" opacity="0.85"/>
+    <circle cx="1367" cy="320" r="3.5" fill="#48486a"/>
+    <!-- Espresso cup -->
+    <rect x="1326" y="390" width="26" height="16" fill="#3e2608" rx="2"/>
+    <rect x="1322" y="404" width="34" height="3"  fill="#5c3a18" rx="1"/>
+    <!-- Steam -->
+    <path d="M1336,388 Q1332,378 1336,368 Q1340,358 1336,348" stroke="#aaa" stroke-width="1.5" fill="none" opacity="0">
+      <animate attributeName="opacity" values="0;0.45;0" dur="3s" repeatCount="indefinite"/>
+      <animateTransform attributeName="transform" type="translate" from="0,0" to="0,-18" dur="3s" repeatCount="indefinite"/>
+    </path>
+    <path d="M1345,388 Q1350,378 1345,368 Q1340,358 1345,348" stroke="#aaa" stroke-width="1.5" fill="none" opacity="0">
+      <animate attributeName="opacity" values="0;0.35;0" dur="3.5s" begin="1.1s" repeatCount="indefinite"/>
+      <animateTransform attributeName="transform" type="translate" from="0,0" to="0,-18" dur="3.5s" begin="1.1s" repeatCount="indefinite"/>
+    </path>
+
+    <!-- ──────────────────────────────────────────── -->
+    <!-- 7 · TABLES & CHAIRS                          -->
+    <!-- ──────────────────────────────────────────── -->
+    <!-- Left table -->
+    <ellipse cx="248" cy="705" rx="82" ry="17" fill="#3e2608"/>
+    <ellipse cx="248" cy="702" rx="80" ry="15" fill="#4c3010"/>
+    <rect x="242" y="717" width="12" height="105" fill="#2a1806" rx="3"/>
+    <ellipse cx="248" cy="822" rx="38" ry="8"  fill="#180e02"/>
+    <!-- Chairs left table -->
+    <rect x="148" y="686" width="54" height="9"  fill="#2a1806" rx="3"/>
+    <rect x="152" y="695" width="5"  height="45" fill="#1a0e02" rx="2"/>
+    <rect x="192" y="695" width="5"  height="45" fill="#1a0e02" rx="2"/>
+
+    <!-- Center table (laptop lives here) -->
+    <ellipse cx="578" cy="650" rx="105" ry="21" fill="#3e2608"/>
+    <ellipse cx="578" cy="647" rx="103" ry="19" fill="#4c3010"/>
+    <rect x="571" y="667" width="13"  height="120" fill="#2a1806" rx="3"/>
+    <ellipse cx="578" cy="787" rx="48" ry="9"  fill="#180e02"/>
+    <!-- Lamp pool on table surface -->
+    <ellipse cx="578" cy="648" rx="95" ry="16" fill="#f5a020" opacity="0.05"/>
+    <!-- Chair right of center table -->
+    <rect x="690" y="632" width="58" height="9"  fill="#2a1806" rx="3"/>
+    <rect x="694" y="641" width="5"  height="50" fill="#1a0e02" rx="2"/>
+    <rect x="739" y="641" width="5"  height="50" fill="#1a0e02" rx="2"/>
+    <!-- Chair behind center table (partial) -->
+    <rect x="530" y="620" width="50" height="7" fill="#2a1806" rx="2" opacity="0.6"/>
+
+    <!-- ──────────────────────────────────────────── -->
+    <!-- 8 · PENDANT LIGHTS                           -->
+    <!-- ──────────────────────────────────────────── -->
+
+    <!-- Pendant over left area -->
+    <line x1="400" y1="0" x2="400" y2="118" stroke="#180e03" stroke-width="3"/>
+    <path d="M368,118 L432,118 L452,154 L348,154 Z" fill="#180e03"/>
+    <path d="M372,154 L428,154 L418,165 L382,165 Z" fill="#2a1806"/>
+    <circle cx="400" cy="165" r="8" fill="#f5e050" opacity="0.95"/>
+    <ellipse cx="400" cy="200" rx="130" ry="90" fill="url(#lampBloom)" class="pendant-glow"/>
+
+    <!-- Pendant center -->
+    <line x1="720" y1="0" x2="720" y2="100" stroke="#180e03" stroke-width="3"/>
+    <path d="M688,100 L752,100 L772,136 L668,136 Z" fill="#180e03"/>
+    <path d="M692,136 L748,136 L738,147 L702,147 Z" fill="#2a1806"/>
+    <circle cx="720" cy="147" r="8" fill="#f5e050" opacity="0.95"/>
+    <ellipse cx="720" cy="185" rx="140" ry="100" fill="url(#lampBloom)" class="pendant-glow"/>
+
+    <!-- Pendant over counter -->
+    <line x1="1120" y1="0" x2="1120" y2="110" stroke="#180e03" stroke-width="3"/>
+    <path d="M1088,110 L1152,110 L1172,146 L1068,146 Z" fill="#180e03"/>
+    <path d="M1092,146 L1148,146 L1138,157 L1102,157 Z" fill="#2a1806"/>
+    <circle cx="1120" cy="157" r="8" fill="#f5e050" opacity="0.95"/>
+    <ellipse cx="1120" cy="195" rx="150" ry="100" fill="url(#lampBloom)" class="pendant-glow"/>
+    <!-- Counter surface glow -->
+    <ellipse cx="1120" cy="400" rx="200" ry="30" fill="#f5a020" opacity="0.06"/>
+
+    <!-- ──────────────────────────────────────────── -->
+    <!-- 9 · INTERACTIVE OBJECTS                      -->
+    <!-- ──────────────────────────────────────────── -->
+
+    <!-- ─── LAPTOP — Web Development ─────────────── -->
+    <g class="interactive" id="go-webdev" data-target="projects.html#webdev">
+      <!-- Screen -->
+      <rect x="528" y="580" width="114" height="72" fill="#0a0e1c" rx="3"/>
+      <rect x="532" y="584" width="106" height="64" fill="#0c1628"/>
+      <!-- Code text -->
+      <text x="536" y="598" fill="#4a9eff" font-size="6.5" font-family="monospace">&lt;div class="world"&gt;</text>
+      <text x="540" y="608" fill="#50fa7b" font-size="6.5" font-family="monospace">  .hero {</text>
+      <text x="544" y="618" fill="#f1fa8c" font-size="6.5" font-family="monospace">    color: gold;</text>
+      <text x="540" y="628" fill="#50fa7b" font-size="6.5" font-family="monospace">  }</text>
+      <text x="536" y="638" fill="#4a9eff" font-size="6.5" font-family="monospace">&lt;/div&gt;</text>
+      <!-- Blinking cursor -->
+      <rect x="558" y="641" width="4" height="8" fill="#4a9eff" class="cursor-blink"/>
+      <!-- Screen glow bloom -->
+      <ellipse cx="585" cy="635" rx="55" ry="28" fill="url(#screenGlow)" filter="url(#blur4)"/>
+      <!-- Hinge -->
+      <rect x="520" y="650" width="130" height="8" fill="#181828" rx="2"/>
+      <!-- Base/keyboard -->
+      <rect x="508" y="656" width="154" height="7" fill="#141424" rx="3"/>
+      <!-- Screen glow on table -->
+      <ellipse cx="585" cy="653" rx="52" ry="10" fill="#4a9eff" opacity="0.06"/>
+      <!-- Click zone -->
+      <rect x="508" y="580" width="154" height="83" fill="transparent"/>
+      <!-- Label -->
+      <text class="item-label" x="510" y="576" fill="#e8b45a" font-size="12"
+            letter-spacing="2" font-family="Cinzel, serif" text-anchor="middle"
+            x="585">WEB DEVELOPMENT</text>
+    </g>
+
+    <!-- ─── CAMERA — Photography ─────────────────── -->
+    <g class="interactive" id="go-photo" data-target="projects.html#photography">
+      <!-- Camera body -->
+      <rect x="1022" y="348" width="58" height="40" fill="#1c1c1c" rx="4"/>
+      <!-- Viewfinder hump -->
+      <rect x="1032" y="340" width="28" height="12" fill="#282828" rx="2"/>
+      <!-- Lens barrel -->
+      <circle cx="1046" cy="368" r="15" fill="#0e0e0e"/>
+      <circle cx="1046" cy="368" r="11" fill="#1c1c2e"/>
+      <circle cx="1046" cy="368" r="7"  fill="#0a0a1c"/>
+      <circle cx="1046" cy="368" r="3"  fill="#1a1a30"/>
+      <circle cx="1042" cy="364" r="1.5" fill="#8ab4f8" opacity="0.6"/>
+      <!-- Shutter btn -->
+      <circle cx="1067" cy="351" r="4.5" fill="#3c3c3c"/>
+      <circle cx="1067" cy="351" r="2.5" fill="#4c4c4c"/>
+      <!-- Strap lugs -->
+      <rect x="1022" y="354" width="7" height="9" fill="#3c3c3c" rx="1"/>
+      <rect x="1073" y="354" width="7" height="9" fill="#3c3c3c" rx="1"/>
+      <!-- Click zone -->
+      <rect x="1018" y="338" width="68" height="58" fill="transparent"/>
+      <text class="item-label" x="1052" y="332" fill="#e8b45a" font-size="11"
+            letter-spacing="2" font-family="Cinzel, serif" text-anchor="middle">PHOTOGRAPHY</text>
+    </g>
+
+    <!-- ─── DJ CONTROLLER — Music ────────────────── -->
+    <g class="interactive" id="go-music" data-target="projects.html#music">
+      <!-- Controller chassis -->
+      <rect x="1158" y="345" width="118" height="50" fill="#0e0e1c" rx="5"/>
+      <!-- Left platter -->
+      <circle cx="1190" cy="370" r="18" fill="#1c1c2e"/>
+      <circle cx="1190" cy="370" r="14" fill="#0e0e1c"/>
+      <circle cx="1190" cy="370" r="10" fill="#181828" stroke="#26263e" stroke-width="1"/>
+      <circle cx="1190" cy="370" r="7"  fill="none"   stroke="#26263e" stroke-width="1"/>
+      <circle cx="1190" cy="370" r="3.5" fill="#2a2a4a"/>
+      <!-- Right platter -->
+      <circle cx="1248" cy="370" r="18" fill="#1c1c2e"/>
+      <circle cx="1248" cy="370" r="14" fill="#0e0e1c"/>
+      <circle cx="1248" cy="370" r="10" fill="#181828" stroke="#26263e" stroke-width="1"/>
+      <circle cx="1248" cy="370" r="7"  fill="none"   stroke="#26263e" stroke-width="1"/>
+      <circle cx="1248" cy="370" r="3.5" fill="#2a2a4a"/>
+      <!-- Mixer strip -->
+      <rect x="1205" y="350" width="28" height="40" fill="#0a0a16" rx="2"/>
+      <!-- Fader tracks -->
+      <rect x="1208" y="355" width="5"  height="24" fill="#1e1e2e" rx="1"/>
+      <rect x="1216" y="355" width="5"  height="24" fill="#1e1e2e" rx="1"/>
+      <rect x="1224" y="355" width="5"  height="24" fill="#1e1e2e" rx="1"/>
+      <!-- Fader knobs -->
+      <rect x="1207" y="362" width="7" height="5" fill="#e8b45a" rx="1" opacity="0.9"/>
+      <rect x="1215" y="368" width="7" height="5" fill="#e8b45a" rx="1" opacity="0.9"/>
+      <rect x="1223" y="357" width="7" height="5" fill="#e8b45a" rx="1" opacity="0.9"/>
+      <!-- LEDs -->
+      <circle cx="1210" cy="353" r="2" fill="#00ff88" opacity="0.95"/>
+      <circle cx="1219" cy="353" r="2" fill="#e8b45a" opacity="0.95"/>
+      <circle cx="1228" cy="353" r="2" fill="#ff4a4a" opacity="0.95"/>
+      <!-- Glow from LEDs -->
+      <ellipse cx="1219" cy="353" rx="20" ry="10" fill="url(#djGlow)" opacity="0.4" filter="url(#blur4)"/>
+      <!-- Click zone -->
+      <rect x="1155" y="340" width="126" height="60" fill="transparent"/>
+      <text class="item-label" x="1218" y="334" fill="#e8b45a" font-size="11"
+            letter-spacing="2" font-family="Cinzel, serif" text-anchor="middle">MUSIC</text>
+    </g>
+
+    <!-- ──────────────────────────────────────────── -->
+    <!-- 10 · AMBIENT OVERLAYS & VIGNETTE            -->
+    <!-- ──────────────────────────────────────────── -->
+
+    <!-- Floor-level atmosphere -->
+    <rect x="0" y="830" width="1440" height="70" fill="#08050f" opacity="0.55"/>
+
+    <!-- Side vignettes -->
+    <rect x="0"    y="0" width="160"  height="900" fill="#050510" opacity="0.65"/>
+    <rect x="1280" y="0" width="160"  height="900" fill="#050510" opacity="0.40"/>
+
+    <!-- Top & bottom vignettes -->
+    <rect x="0" y="0"   width="1440" height="40"  fill="#050510" opacity="0.8"/>
+    <rect x="0" y="860" width="1440" height="40"  fill="#050510" opacity="0.85"/>
+
+    <!-- Subtle overall warm tint -->
+    <rect x="0" y="0" width="1440" height="900" fill="#f5a020" opacity="0.015"/>
+
+  </svg>
+
+  <!-- ── Title ───────────────────────────────────── -->
+  <div id="title-overlay">
+    <h1>DALLAS LUCY</h1>
+    <p>EST. 2026</p>
+  </div>
+
+  <!-- ── Hint ────────────────────────────────────── -->
+  <p id="hint">click an object to explore</p>
+
+  <!-- ── Transition overlay ─────────────────────── -->
+  <div id="transition-overlay"></div>
+
+</div><!-- #scene -->
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script>
+// ─── BIWA SYNTHESIZER (no audio files needed) ──────────────────
+// Synthesizes a plucked string chord resembling a biwa strum.
+// Notes: A3 + D4 + A4 with sharp attack, long natural decay.
+let audioCtx = null;
+
+function getAudioCtx() {
+  if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+  return audioCtx;
+}
+
+function playBiwa() {
+  const ctx = getAudioCtx();
+  if (ctx.state === 'suspended') ctx.resume();
+
+  // A slight reverb via convolver would be ideal but we simulate with delay
+  const notes = [
+    { freq: 220.00, vol: 0.28, delay: 0.000, type: 'sawtooth' }, // A3
+    { freq: 293.66, vol: 0.18, delay: 0.060, type: 'triangle'  }, // D4
+    { freq: 440.00, vol: 0.14, delay: 0.120, type: 'triangle'  }, // A4
+  ];
+
+  notes.forEach(({ freq, vol, delay, type }) => {
+    const osc  = ctx.createOscillator();
+    const gain = ctx.createGain();
+    const filt = ctx.createBiquadFilter();
+
+    filt.type = 'lowpass';
+    filt.frequency.value = 1800;
+    filt.Q.value = 1.2;
+
+    osc.type = type;
+    // Slight pitch fall on attack (biwa characteristic)
+    osc.frequency.setValueAtTime(freq * 1.018, ctx.currentTime + delay);
+    osc.frequency.exponentialRampToValueAtTime(freq, ctx.currentTime + delay + 0.06);
+
+    // Envelope: instant attack, slow exponential decay
+    gain.gain.setValueAtTime(0,   ctx.currentTime + delay);
+    gain.gain.linearRampToValueAtTime(vol, ctx.currentTime + delay + 0.012);
+    gain.gain.exponentialRampToValueAtTime(0.0005, ctx.currentTime + delay + 2.8);
+
+    osc.connect(filt);
+    filt.connect(gain);
+    gain.connect(ctx.destination);
+
+    osc.start(ctx.currentTime + delay);
+    osc.stop(ctx.currentTime + delay + 3.0);
+  });
+}
+
+// ─── NAVIGATION WITH GSAP TRANSITION ──────────────────────────
+const overlay = document.getElementById('transition-overlay');
+
+function navigateTo(url) {
+  playBiwa();
+  gsap.to(overlay, {
+    opacity: 1,
+    duration: 0.65,
+    ease: 'power2.in',
+    onComplete: () => { window.location.href = url; }
+  });
+}
+
+// ─── ATTACH CLICK HANDLERS ─────────────────────────────────────
+document.querySelectorAll('.interactive').forEach(el => {
+  el.addEventListener('click', function () {
+    const target = this.dataset.target;
+    if (!target) return;
+
+    // Quick scale punch on the element
+    gsap.to(this, {
+      scale: 1.06,
+      duration: 0.12,
+      ease: 'power2.out',
+      yoyo: true,
+      repeat: 1,
+      transformOrigin: 'center center',
+      onComplete: () => navigateTo(target)
+    });
+  });
+
+  // Hover micro-animation
+  el.addEventListener('mouseenter', () =>
+    gsap.to(el, { scale: 1.03, duration: 0.2, ease: 'power2.out', transformOrigin: 'center center' }));
+  el.addEventListener('mouseleave', () =>
+    gsap.to(el, { scale: 1.00, duration: 0.2, ease: 'power2.out' }));
+});
+
+// ─── INTRO SEQUENCE ────────────────────────────────────────────
+const title    = document.getElementById('title-overlay');
+const hint     = document.getElementById('hint');
+const items    = document.querySelectorAll('.interactive');
+
+gsap.set([title, hint], { opacity: 0 });
+gsap.set(items,          { opacity: 0 });
+
+gsap.timeline({ delay: 0.1 })
+  // Fade out the black overlay (reveal the scene)
+  .to(overlay, { opacity: 0, duration: 1.4, ease: 'power2.out' })
+  // Title drifts in
+  .fromTo(title, { y: -14, opacity: 0 },
+                 { y: 0,   opacity: 1, duration: 1.0, ease: 'power2.out' }, '-=0.4')
+  // Interactive objects appear with a stagger
+  .to(items, { opacity: 1, duration: 0.7, stagger: 0.12, ease: 'power2.out' }, '-=0.3')
+  // Hint text last
+  .to(hint, { opacity: 1, duration: 0.8, ease: 'power2.out' }, '-=0.1');
+</script>
+
 </body>
 </html>
