@@ -1,46 +1,415 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Contact Me</title>
-    <link rel="stylesheet" href="styles.css">
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Contact — Dallas Lucy</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700&family=Cinzel:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: #050510;
+      color: #c8b89a;
+      font-family: 'Cinzel', serif;
+      min-height: 100vh;
+    }
+
+    /* ── Navbar ─────────────────────────────────────── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      background: rgba(5, 5, 16, 0.92);
+      border-bottom: 1px solid rgba(232, 180, 90, 0.2);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 48px;
+      height: 64px;
+    }
+
+    .nav-logo {
+      font-family: 'Cinzel Decorative', serif;
+      font-size: 0.9rem;
+      color: #e8b45a;
+      text-decoration: none;
+      letter-spacing: 4px;
+      text-shadow: 0 0 20px rgba(232, 180, 90, 0.4);
+      white-space: nowrap;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 36px;
+      list-style: none;
+    }
+
+    .nav-links a {
+      color: rgba(232, 180, 90, 0.6);
+      text-decoration: none;
+      font-size: 0.65rem;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      transition: color 0.25s, text-shadow 0.25s;
+    }
+
+    .nav-links a:hover,
+    .nav-links a.active {
+      color: #e8b45a;
+      text-shadow: 0 0 14px rgba(232, 180, 90, 0.6);
+    }
+
+    /* ── Page Hero ──────────────────────────────────── */
+    .page-hero {
+      padding-top: 120px;
+      padding-bottom: 48px;
+      text-align: center;
+    }
+
+    .page-hero::after {
+      content: '';
+      display: block;
+      width: 200px;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, #e8b45a, transparent);
+      margin: 32px auto 0;
+    }
+
+    .page-hero h1 {
+      font-family: 'Cinzel Decorative', serif;
+      font-size: clamp(2rem, 5vw, 3.5rem);
+      color: #e8b45a;
+      letter-spacing: 10px;
+      text-shadow: 0 0 40px rgba(232, 180, 90, 0.45), 0 0 80px rgba(232, 180, 90, 0.15);
+    }
+
+    .page-hero p {
+      margin-top: 14px;
+      font-size: 0.65rem;
+      color: rgba(232, 180, 90, 0.45);
+      letter-spacing: 6px;
+      text-transform: uppercase;
+    }
+
+    /* ── Main content ───────────────────────────────── */
+    main {
+      max-width: 860px;
+      margin: 0 auto;
+      padding: 0 32px 120px;
+    }
+
+    /* ── Two-column layout ──────────────────────────── */
+    .contact-layout {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 32px;
+      align-items: start;
+      margin-top: 8px;
+    }
+
+    @media (max-width: 640px) {
+      .contact-layout { grid-template-columns: 1fr; }
+    }
+
+    /* ── Section headers ────────────────────────────── */
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      margin-bottom: 28px;
+      margin-top: 64px;
+    }
+
+    .section-title h2 {
+      font-family: 'Cinzel Decorative', serif;
+      font-size: 1.1rem;
+      color: #e8b45a;
+      letter-spacing: 6px;
+      white-space: nowrap;
+      text-shadow: 0 0 20px rgba(232, 180, 90, 0.3);
+    }
+
+    .section-title::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: linear-gradient(90deg, rgba(232,180,90,0.35), transparent);
+    }
+
+    /* ── Form ───────────────────────────────────────── */
+    .form-card {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(232, 180, 90, 0.12);
+      border-radius: 4px;
+      padding: 36px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .form-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(232,180,90,0.5), transparent);
+    }
+
+    .form-group {
+      margin-bottom: 24px;
+    }
+
+    label {
+      display: block;
+      font-size: 0.58rem;
+      letter-spacing: 3px;
+      color: rgba(232, 180, 90, 0.55);
+      text-transform: uppercase;
+      margin-bottom: 8px;
+    }
+
+    input[type="text"],
+    input[type="email"],
+    textarea {
+      width: 100%;
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(232, 180, 90, 0.18);
+      border-radius: 3px;
+      color: rgba(200, 184, 154, 0.85);
+      font-family: 'Cinzel', serif;
+      font-size: 0.72rem;
+      letter-spacing: 0.5px;
+      padding: 12px 16px;
+      transition: border-color 0.25s, box-shadow 0.25s;
+      outline: none;
+    }
+
+    input[type="text"]:focus,
+    input[type="email"]:focus,
+    textarea:focus {
+      border-color: rgba(232, 180, 90, 0.45);
+      box-shadow: 0 0 16px rgba(232, 180, 90, 0.08);
+    }
+
+    textarea {
+      resize: vertical;
+      min-height: 140px;
+      line-height: 1.7;
+    }
+
+    input::placeholder,
+    textarea::placeholder {
+      color: rgba(200, 184, 154, 0.25);
+    }
+
+    .submit-btn {
+      width: 100%;
+      background: transparent;
+      border: 1px solid rgba(232, 180, 90, 0.4);
+      color: #e8b45a;
+      font-family: 'Cinzel', serif;
+      font-size: 0.62rem;
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      padding: 14px;
+      border-radius: 3px;
+      cursor: pointer;
+      transition: background 0.25s, box-shadow 0.25s;
+      margin-top: 8px;
+    }
+
+    .submit-btn:hover {
+      background: rgba(232, 180, 90, 0.08);
+      box-shadow: 0 0 20px rgba(232, 180, 90, 0.15);
+    }
+
+    .form-note {
+      font-size: 0.58rem;
+      color: rgba(200, 184, 154, 0.3);
+      letter-spacing: 0.5px;
+      margin-top: 16px;
+      text-align: center;
+      line-height: 1.7;
+    }
+
+    /* ── Contact links panel ────────────────────────── */
+    .links-panel {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .contact-link {
+      display: flex;
+      align-items: center;
+      gap: 18px;
+      background: rgba(255, 255, 255, 0.025);
+      border: 1px solid rgba(232, 180, 90, 0.1);
+      border-radius: 4px;
+      padding: 20px 24px;
+      text-decoration: none;
+      transition: border-color 0.25s, box-shadow 0.25s, transform 0.25s;
+    }
+
+    .contact-link:hover {
+      border-color: rgba(232, 180, 90, 0.3);
+      box-shadow: 0 0 20px rgba(232, 180, 90, 0.07);
+      transform: translateX(4px);
+    }
+
+    .link-icon {
+      font-size: 1.2rem;
+      flex-shrink: 0;
+      filter: opacity(0.7);
+    }
+
+    .link-info {
+      flex: 1;
+      overflow: hidden;
+    }
+
+    .link-label {
+      font-size: 0.58rem;
+      letter-spacing: 3px;
+      color: rgba(232, 180, 90, 0.5);
+      text-transform: uppercase;
+      margin-bottom: 4px;
+    }
+
+    .link-value {
+      font-size: 0.72rem;
+      color: rgba(200, 184, 154, 0.75);
+      letter-spacing: 0.5px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      transition: color 0.25s;
+    }
+
+    .contact-link:hover .link-value {
+      color: rgba(232, 180, 90, 0.85);
+    }
+
+    /* ── Footer ─────────────────────────────────────── */
+    footer {
+      border-top: 1px solid rgba(232, 180, 90, 0.1);
+      text-align: center;
+      padding: 28px;
+      font-size: 0.6rem;
+      color: rgba(232, 180, 90, 0.25);
+      letter-spacing: 3px;
+    }
+  </style>
 </head>
 <body>
-    <header>
-        <nav>
-            <a href="index.html">Home</a>
-            <a href="about-me.html">About Me</a>
-            <a href="projects.html">Projects</a>
-            <a href="blog.html">Blog</a>
-            <a href="contact.html">Contact</a>
-        </nav>
-    </header>
-    <h1 class="center">Contact Me</h1>
-    <p>If you would like to get in touch, please reference the information at the bottom of this page or fill out the following form:</p>
-    <form action="#" method="post">
-        <fieldset>
-            <legend>Contact Information</legend>
-            <label for="name">Name:</label>
-            <input type="text" id="name" name="name" required>
-            <label for="email">Email:</label>
-            <input type="email" id="email" name="email" required>
-        </fieldset>
-        <fieldset>
-            <legend>Leave Message Below</legend>
-            <textarea id="message" name="message" rows="4" cols="50" required></textarea>
-            <input type="submit" value="Submit">
-        </fieldset>
-    </form>
-    <address>
-        <p>Email: <a href="mailto:dallasdlucy@gmail.com">dallasdlucy@gmail.com</a><br>
-        Phone: <a href = "tel:+13134954221">(313) 495-4221</a><br>
-        LinkedIn: <a href="#" target="_blank">Dallas Lucy</a><br>
-        GitHub: <a href="https://github.com/udsllc" target="_blank">https://github.com/udsllc</a><br>
-        </p>
-    </address>
-</body>
-<footer>
+
+  <!-- ── Navigation ── -->
+  <nav>
+    <a href="index.html" class="nav-logo">Dallas Lucy</a>
+    <ul class="nav-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="projects.html">Projects</a></li>
+      <li><a href="about-me.html">About</a></li>
+      <li><a href="contact.html" class="active">Contact</a></li>
+    </ul>
+  </nav>
+
+  <!-- ── Hero ── -->
+  <div class="page-hero">
+    <h1>Contact</h1>
+    <p>Let's make something</p>
+  </div>
+
+  <!-- ── Main ── -->
+  <main>
+
+    <div class="section-title"><h2>Get in Touch</h2></div>
+
+    <div class="contact-layout">
+
+      <!-- Form -->
+      <div class="form-card">
+        <form id="contact-form">
+          <div class="form-group">
+            <label for="name">Name</label>
+            <input type="text" id="name" name="name" placeholder="Your name" required>
+          </div>
+          <div class="form-group">
+            <label for="email">Email</label>
+            <input type="email" id="email" name="email" placeholder="your@email.com" required>
+          </div>
+          <div class="form-group">
+            <label for="message">Message</label>
+            <textarea id="message" name="message" placeholder="What's on your mind..." required></textarea>
+          </div>
+          <button type="submit" class="submit-btn">Send Message</button>
+          <p class="form-note">
+            Opens your email client with the message pre-filled.
+          </p>
+        </form>
+        <script>
+          document.getElementById('contact-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const name    = document.getElementById('name').value.trim();
+            const email   = document.getElementById('email').value.trim();
+            const message = document.getElementById('message').value.trim();
+            const subject = encodeURIComponent('Message from ' + name);
+            const body    = encodeURIComponent('From: ' + name + ' <' + email + '>\n\n' + message);
+            window.location.href = 'mailto:dallasdlucy@gmail.com?subject=' + subject + '&body=' + body;
+          });
+        </script>
+      </div>
+
+      <!-- Links -->
+      <div class="links-panel">
+
+        <a href="mailto:dallasdlucy@gmail.com" class="contact-link">
+          <span class="link-icon">✉️</span>
+          <div class="link-info">
+            <div class="link-label">Email</div>
+            <div class="link-value">dallasdlucy@gmail.com</div>
+          </div>
+        </a>
+
+        <a href="https://github.com/udsllc" target="_blank" class="contact-link">
+          <span class="link-icon">🐙</span>
+          <div class="link-info">
+            <div class="link-label">GitHub</div>
+            <div class="link-value">github.com/udsllc</div>
+          </div>
+        </a>
+
+        <a href="https://soundcloud.com/user-423834005-1238198" target="_blank" class="contact-link">
+          <span class="link-icon">🎵</span>
+          <div class="link-info">
+            <div class="link-label">SoundCloud</div>
+            <div class="link-value">Clouted Mar</div>
+          </div>
+        </a>
+
+        <a href="#" class="contact-link">
+          <span class="link-icon">💼</span>
+          <div class="link-info">
+            <div class="link-label">LinkedIn</div>
+            <div class="link-value">Dallas Lucy</div>
+          </div>
+        </a>
+
+      </div>
+
+    </div>
+
+  </main>
+
+  <footer>
     <p>&copy; 2025 Dallas Lucy. All rights reserved.</p>
-</footer>
+  </footer>
+
+</body>
 </html>
