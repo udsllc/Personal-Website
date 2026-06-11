@@ -138,11 +138,6 @@ export default function Gallery() {
                   className="w-full object-cover group-hover:scale-105 transition-transform duration-300"
                   loading="lazy"
                 />
-                {photo.alt && (
-                  <p className="font-mono text-xs text-muted px-3 py-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
-                    {photo.alt}
-                  </p>
-                )}
               </div>
             ))}
           </motion.div>
