@@ -22,9 +22,8 @@ export const skills = [
   'HTML/CSS', 'Tailwind CSS', 'Linux', 'AWS',
 ]
 
-export const experience = [
+export const workExperience = [
   {
-    type: 'work',
     title: 'Incoming Investment Banking Analyst',
     org: 'Bank of America',
     date: 'Aug 2025 – Present',
@@ -34,7 +33,6 @@ export const experience = [
     ],
   },
   {
-    type: 'work',
     title: 'Investment Banking Summer Analyst',
     org: 'Bank of America',
     date: 'Jun 2025 – Aug 2025',
@@ -44,7 +42,6 @@ export const experience = [
     ],
   },
   {
-    type: 'work',
     title: 'Sophomore Investment Banking Summer Analyst',
     org: 'Bank of America',
     date: 'Jun 2024 – Aug 2024',
@@ -53,8 +50,25 @@ export const experience = [
       'New York, NY',
     ],
   },
+]
+
+export const education = [
   {
-    type: 'work',
+    title: 'B.A. Economics',
+    org: 'Harvard University',
+    date: 'Aug 2022 – Jun 2026',
+    bullets: [],
+  },
+  {
+    title: 'High School Diploma',
+    org: 'Renaissance High School',
+    date: 'Sep 2018 – Jun 2022',
+    bullets: [],
+  },
+]
+
+export const affiliations = [
+  {
     title: 'Portfolio Manager / Student Intern',
     org: 'CLIMB USA',
     date: 'Jun 2021 – Jun 2023',
@@ -64,31 +78,15 @@ export const experience = [
     ],
   },
   {
-    type: 'work',
-    title: 'Mentee',
-    org: 'Midnight Golf Program',
-    date: 'Oct 2021 – May 2022',
-    bullets: [],
-  },
-  {
-    type: 'education',
-    title: 'B.A. Economics',
-    org: 'Harvard University',
-    date: 'Aug 2022 – Jun 2026',
-    bullets: [],
-  },
-  {
-    type: 'education',
     title: 'Alternative Investments & Investment Banking Track',
     org: 'SEO (Sponsors for Educational Opportunity)',
     date: '2023 – 2024',
     bullets: [],
   },
   {
-    type: 'education',
-    title: 'High School Diploma',
-    org: 'Renaissance High School',
-    date: 'Sep 2018 – Jun 2022',
+    title: 'Mentee',
+    org: 'Midnight Golf Program',
+    date: 'Oct 2021 – May 2022',
     bullets: [],
   },
 ]
