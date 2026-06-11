@@ -2,7 +2,7 @@ export const personal = {
   name: 'Dallas Lucy',
   title: 'Incoming Investment Banking Analyst',
   tagline: 'Finance. Film. Code.',
-  bio: `Harvard Economics, class of 2026. Joining Bank of America's Natural Resources & Energy Transition group after graduation. In the time between, I make films, produce music, and build software — not always separately.`,
+  bio: `Harvard Economics, class of 2026. Joining Bank of America's Natural Resources & Energy Transition group after graduation. In the time between, I make films, produce music, DJ, and build software for fun. Not always separately.`,
   email: 'dallasdlucy@gmail.com',
   github: 'https://github.com/udsllc',
   linkedin: 'https://linkedin.com/in/dallaslucy',
@@ -10,9 +10,9 @@ export const personal = {
 
 export const typingPhrases = [
   'Investment Banking Analyst.',
-  'Software Developer.',
   'Filmmaker.',
   'Music Producer.',
+  'DJ.',
 ]
 
 export const skills = [
