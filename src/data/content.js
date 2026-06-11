@@ -1,17 +1,18 @@
 export const personal = {
   name: 'Dallas Lucy',
-  title: 'Software Developer',
-  tagline: 'Building things for the web — one commit at a time.',
-  bio: `I'm a software developer passionate about building clean, performant products. I love working across the full stack, diving into interesting problems, and shipping things people actually use. When I'm not coding you'll find me making music or exploring new tech.`,
-  email: 'lucy.dallas2004@gmail.com',
-  github: 'https://github.com/dallaslucy',
+  title: 'Incoming Investment Banking Analyst',
+  tagline: 'Harvard Economics · Finance · Film · Code.',
+  bio: `I'm an Economics student at Harvard and incoming Investment Banking Analyst at Bank of America (Natural Resources & Energy Transition). Outside of finance I build software, produce music, and make films.`,
+  email: 'dallasdlucy@gmail.com',
+  github: 'https://github.com/udsllc',
   linkedin: 'https://linkedin.com/in/dallaslucy',
+  medium: 'https://medium.com/@dallaslucy',
 }
 
 export const typingPhrases = [
+  'Investment Banking Analyst.',
   'Software Developer.',
-  'Full Stack Engineer.',
-  'Problem Solver.',
+  'Filmmaker.',
   'Music Producer.',
 ]
 
@@ -22,27 +23,74 @@ export const skills = [
 ]
 
 export const experience = [
-  // Fill in from LinkedIn — example structure:
-  // {
-  //   type: 'work',
-  //   title: 'Software Engineer',
-  //   org: 'Company Name',
-  //   date: '2024 – Present',
-  //   bullets: [
-  //     'Built X that improved Y by Z%',
-  //     'Led initiative to ...',
-  //   ],
-  // },
-  // {
-  //   type: 'education',
-  //   title: 'B.S. Computer Science',
-  //   org: 'University Name',
-  //   date: '2022 – 2026',
-  //   bullets: [
-  //     'GPA: X.X',
-  //     'Relevant coursework: Data Structures, Algorithms, ...',
-  //   ],
-  // },
+  {
+    type: 'work',
+    title: 'Incoming Investment Banking Analyst',
+    org: 'Bank of America',
+    date: 'Aug 2025 – Present',
+    bullets: [
+      'Natural Resources & Energy Transition (NET): Power & Utilities',
+      'New York, NY',
+    ],
+  },
+  {
+    type: 'work',
+    title: 'Investment Banking Summer Analyst',
+    org: 'Bank of America',
+    date: 'Jun 2025 – Aug 2025',
+    bullets: [
+      'Natural Resources & Energy Transition group',
+      'New York, NY',
+    ],
+  },
+  {
+    type: 'work',
+    title: 'Sophomore Investment Banking Summer Analyst',
+    org: 'Bank of America',
+    date: 'Jun 2024 – Aug 2024',
+    bullets: [
+      'Natural Resources & Energy Transition group',
+      'New York, NY',
+    ],
+  },
+  {
+    type: 'work',
+    title: 'Portfolio Manager / Student Intern',
+    org: 'CLIMB USA',
+    date: 'Jun 2021 – Jun 2023',
+    bullets: [
+      'Researched stocks to build and manage a mock investment portfolio',
+      'Engaged participants in the CLIMB Summer Stock Market Experience competition',
+    ],
+  },
+  {
+    type: 'work',
+    title: 'Mentee',
+    org: 'Midnight Golf Program',
+    date: 'Oct 2021 – May 2022',
+    bullets: [],
+  },
+  {
+    type: 'education',
+    title: 'B.A. Economics',
+    org: 'Harvard University',
+    date: 'Aug 2022 – Jun 2026',
+    bullets: [],
+  },
+  {
+    type: 'education',
+    title: 'Alternative Investments & Investment Banking Track',
+    org: 'SEO (Sponsors for Educational Opportunity)',
+    date: '2023 – 2024',
+    bullets: [],
+  },
+  {
+    type: 'education',
+    title: 'High School Diploma',
+    org: 'Renaissance High School',
+    date: 'Sep 2018 – Jun 2022',
+    bullets: [],
+  },
 ]
 
 export const projects = [
@@ -59,7 +107,7 @@ export const projects = [
     name: 'Personal Website',
     description: 'This site — built with React, Vite, and Tailwind CSS. Dark terminal aesthetic with smooth scroll animations.',
     tech: ['React', 'Vite', 'Tailwind CSS', 'Framer Motion'],
-    github: 'https://github.com/dallaslucy/personal-website',
+    github: 'https://github.com/udsllc/personal-website',
     live: null,
     featured: true,
   },
