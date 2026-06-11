@@ -53,18 +53,6 @@ function ProjectCard({ project, index }) {
 
       <p className="text-muted text-sm leading-relaxed mb-5 flex-1">{project.description}</p>
 
-      {project.bts && (
-        <div className="mb-4 overflow-hidden rounded-md border border-border">
-          <img
-            src={project.bts}
-            alt="Behind the scenes"
-            className="w-full h-40 object-cover group-hover:scale-105 transition-transform duration-300"
-            loading="lazy"
-          />
-          <p className="font-mono text-xs text-muted px-3 py-1.5">BTS</p>
-        </div>
-      )}
-
       <div className="flex flex-wrap gap-2">
         {project.tech.map((t) => (
           <span
@@ -88,7 +76,7 @@ export default function Projects() {
         <div ref={animation.ref}>
           <motion.div initial={animation.initial} animate={animation.animate} transition={animation.transition}>
             <p className="font-mono text-accent text-sm mb-2">// 03</p>
-            <h2 className="text-3xl md:text-4xl font-bold text-text mb-12">Projects</h2>
+            <h2 className="text-3xl md:text-4xl font-bold text-text mb-12">Code</h2>
           </motion.div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">

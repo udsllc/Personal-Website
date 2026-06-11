@@ -180,27 +180,30 @@ export const projects = [
     live: 'https://dallas-os-plum.vercel.app/login.html',
     featured: true,
   },
-  {
-    name: 'Extra Ordinary Obsession',
-    description: 'A short film written, directed, and produced by Dallas Lucy.',
-    tech: ['Film', 'Directing', 'Production'],
-    github: null,
-    live: 'https://www.youtube.com/watch?v=3z62UDhlTM0',
-    featured: false,
-    bts: '/gallery/bts-eoo.jpg',
-  },
 ]
 
 export const gallery = [
-  { src: '/gallery/painting.jpg', alt: 'Painting' },
-  { src: '/gallery/cityscape.jpg', alt: 'Cityscape' },
-  { src: '/gallery/street-poet.jpg', alt: 'Street poet' },
-  { src: '/gallery/squirrel.jpg', alt: 'Squirrel' },
-  { src: '/gallery/asphalt.jpg', alt: 'Asphalt' },
-  { src: '/gallery/snowman.jpg', alt: 'Snowman' },
+  {
+    name: null,
+    slug: 'misc',
+    photos: [
+      { src: '/gallery/cityscape.jpg', alt: 'Barcelona' },
+      { src: '/gallery/street-poet.jpg', alt: '' },
+      { src: '/gallery/squirrel.jpg', alt: '' },
+      { src: '/gallery/asphalt.jpg', alt: '' },
+      { src: '/gallery/snowman.jpg', alt: '' },
+    ],
+  },
 ]
 
 export const films = [
+  {
+    title: 'Extra Ordinary Obsession',
+    subtitle: 'Written, directed, and produced by Dallas Lucy.',
+    url: 'https://www.youtube.com/watch?v=3z62UDhlTM0',
+    bts: '/gallery/bts-eoo.jpg',
+    year: '2022',
+  },
   {
     title: 'Where To',
     subtitle: 'with Dean and Lucy',

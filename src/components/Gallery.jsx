@@ -69,8 +69,11 @@ function Lightbox({ images, startIndex, onClose }) {
         />
       </AnimatePresence>
 
-      <div className="absolute bottom-4 font-mono text-xs text-white/40">
-        {index + 1} / {images.length}
+      <div className="absolute bottom-4 flex flex-col items-center gap-1">
+        {images[index].alt && (
+          <p className="font-mono text-xs text-white/60">{images[index].alt}</p>
+        )}
+        <p className="font-mono text-xs text-white/30">{index + 1} / {images.length}</p>
       </div>
     </motion.div>
   )
@@ -78,7 +81,10 @@ function Lightbox({ images, startIndex, onClose }) {
 
 export default function Gallery() {
   const animation = useScrollAnimation()
+  const [activeSlug, setActiveSlug] = useState(gallery[0]?.slug)
   const [lightboxIndex, setLightboxIndex] = useState(null)
+
+  const activeCollection = gallery.find((c) => c.slug === activeSlug) ?? gallery[0]
 
   useEffect(() => {
     if (lightboxIndex !== null) {
@@ -95,40 +101,64 @@ export default function Gallery() {
         <div ref={animation.ref}>
           <motion.div initial={animation.initial} animate={animation.animate} transition={animation.transition}>
             <p className="font-mono text-accent text-sm mb-2">// 04</p>
-            <h2 className="text-3xl md:text-4xl font-bold text-text mb-12">Gallery</h2>
+            <h2 className="text-3xl md:text-4xl font-bold text-text mb-8">Gallery</h2>
           </motion.div>
 
-          <div className="columns-2 md:columns-3 gap-4 space-y-4">
-            {gallery.map((photo, i) => (
-              <motion.div
-                key={photo.src}
-                className="break-inside-avoid overflow-hidden rounded-lg border border-border cursor-pointer group"
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.4, delay: i * 0.07, ease: 'easeOut' }}
-                onClick={() => setLightboxIndex(i)}
-              >
-                <img
-                  src={photo.src}
-                  alt={photo.alt}
-                  className="w-full object-cover group-hover:scale-105 transition-transform duration-300"
-                  loading="lazy"
-                />
-                {photo.alt && photo.alt !== photo.src && (
-                  <p className="font-mono text-xs text-muted px-3 py-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
-                    {photo.alt}
-                  </p>
-                )}
-              </motion.div>
-            ))}
-          </div>
+          {gallery.length > 1 && (
+            <div className="flex gap-1 mb-8 border-b border-border">
+              {gallery.map((col) => (
+                <button
+                  key={col.slug}
+                  onClick={() => { setActiveSlug(col.slug); setLightboxIndex(null) }}
+                  className={`font-mono text-sm px-4 py-2 border-b-2 -mb-px transition-colors duration-200 ${
+                    activeSlug === col.slug
+                      ? 'border-accent text-accent'
+                      : 'border-transparent text-muted hover:text-text'
+                  }`}
+                >
+                  {col.name ?? '—'}
+                </button>
+              ))}
+            </div>
+          )}
+
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={activeSlug}
+              className="columns-2 md:columns-3 gap-4 space-y-4"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.2 }}
+            >
+              {activeCollection.photos.map((photo, i) => (
+                <div
+                  key={photo.src}
+                  className="break-inside-avoid overflow-hidden rounded-lg border border-border cursor-pointer group"
+                  onClick={() => setLightboxIndex(i)}
+                >
+                  <img
+                    src={photo.src}
+                    alt={photo.alt}
+                    className="w-full object-cover group-hover:scale-105 transition-transform duration-300"
+                    loading="lazy"
+                  />
+                  {photo.alt && (
+                    <p className="font-mono text-xs text-muted px-3 py-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+                      {photo.alt}
+                    </p>
+                  )}
+                </div>
+              ))}
+            </motion.div>
+          </AnimatePresence>
         </div>
       </div>
 
       <AnimatePresence>
         {lightboxIndex !== null && (
           <Lightbox
-            images={gallery}
+            images={activeCollection.photos}
             startIndex={lightboxIndex}
             onClose={() => setLightboxIndex(null)}
           />

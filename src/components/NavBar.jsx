@@ -5,7 +5,7 @@ import { personal } from '../data/content'
 const NAV_LINKS = [
   { label: 'About', href: '#about' },
   { label: 'Experience', href: '#experience' },
-  { label: 'Projects', href: '#projects' },
+  { label: 'Code', href: '#projects' },
   { label: 'Gallery', href: '#gallery' },
   { label: 'Films', href: '#films' },
   { label: 'Listening', href: '#listening' },
