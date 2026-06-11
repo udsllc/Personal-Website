@@ -187,5 +187,24 @@ export const projects = [
     github: null,
     live: 'https://www.youtube.com/watch?v=3z62UDhlTM0',
     featured: false,
+    bts: '/gallery/bts-eoo.jpg',
+  },
+]
+
+export const gallery = [
+  { src: '/gallery/painting.jpg', alt: 'Painting' },
+  { src: '/gallery/cityscape.jpg', alt: 'Cityscape' },
+  { src: '/gallery/street-poet.jpg', alt: 'Street poet' },
+  { src: '/gallery/squirrel.jpg', alt: 'Squirrel' },
+  { src: '/gallery/asphalt.jpg', alt: 'Asphalt' },
+  { src: '/gallery/snowman.jpg', alt: 'Snowman' },
+]
+
+export const films = [
+  {
+    title: 'Where To',
+    subtitle: 'with Dean and Lucy',
+    src: '/films/where-to.mp4',
+    year: '2024',
   },
 ]

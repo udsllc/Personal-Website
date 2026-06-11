@@ -6,6 +6,8 @@ const NAV_LINKS = [
   { label: 'About', href: '#about' },
   { label: 'Experience', href: '#experience' },
   { label: 'Projects', href: '#projects' },
+  { label: 'Gallery', href: '#gallery' },
+  { label: 'Films', href: '#films' },
   { label: 'Listening', href: '#listening' },
   { label: 'Contact', href: '#contact' },
 ]
@@ -22,7 +24,7 @@ export default function NavBar() {
   }, [])
 
   useEffect(() => {
-    const sections = ['hero', 'about', 'experience', 'projects', 'listening', 'contact']
+    const sections = ['hero', 'about', 'experience', 'projects', 'gallery', 'films', 'listening', 'contact']
     const observers = sections.map((id) => {
       const el = document.getElementById(id)
       if (!el) return null

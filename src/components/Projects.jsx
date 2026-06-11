@@ -53,6 +53,18 @@ function ProjectCard({ project, index }) {
 
       <p className="text-muted text-sm leading-relaxed mb-5 flex-1">{project.description}</p>
 
+      {project.bts && (
+        <div className="mb-4 overflow-hidden rounded-md border border-border">
+          <img
+            src={project.bts}
+            alt="Behind the scenes"
+            className="w-full h-40 object-cover group-hover:scale-105 transition-transform duration-300"
+            loading="lazy"
+          />
+          <p className="font-mono text-xs text-muted px-3 py-1.5">BTS</p>
+        </div>
+      )}
+
       <div className="flex flex-wrap gap-2">
         {project.tech.map((t) => (
           <span

@@ -61,7 +61,7 @@ export default function Listening() {
       <div className="max-w-6xl mx-auto">
         <div ref={animation.ref}>
           <motion.div initial={animation.initial} animate={animation.animate} transition={animation.transition}>
-            <p className="font-mono text-accent text-sm mb-2">// 04</p>
+            <p className="font-mono text-accent text-sm mb-2">// 06</p>
             <h2 className="text-3xl md:text-4xl font-bold text-text mb-12">What I'm Listening To</h2>
           </motion.div>
 
