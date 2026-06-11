@@ -1,5 +1,6 @@
-import { motion } from 'framer-motion'
 import { Mail } from 'lucide-react'
+import SectionHeader from './SectionHeader'
+import { personal } from '../data/content'
 
 function GithubIcon({ size = 22 }) {
   return (
@@ -16,8 +17,6 @@ function LinkedinIcon({ size = 22 }) {
     </svg>
   )
 }
-import { useScrollAnimation } from '../hooks/useScrollAnimation'
-import { personal } from '../data/content'
 
 const LINKS = [
   { icon: GithubIcon, label: 'GitHub', href: personal.github },
@@ -26,45 +25,38 @@ const LINKS = [
 ]
 
 export default function Contact() {
-  const animation = useScrollAnimation()
-
   return (
     <>
       <section id="contact" className="py-24 md:py-32 px-6 scroll-mt-20 bg-surface/30">
         <div className="max-w-2xl mx-auto text-center">
-          <div ref={animation.ref}>
-            <motion.div initial={animation.initial} animate={animation.animate} transition={animation.transition}>
-              <p className="font-mono text-accent text-sm mb-2">// 07</p>
-              <h2 className="text-3xl md:text-4xl font-bold text-text mb-4">Get In Touch</h2>
-              <p className="text-muted mb-12 leading-relaxed">
-                I'm always open to new opportunities, collaborations, or just a good conversation.
-                Feel free to reach out.
-              </p>
+          <SectionHeader number="// 07" title="Get In Touch" className="mb-4" />
+          <p className="text-muted mb-12 leading-relaxed">
+            I'm always open to new opportunities, collaborations, or just a good conversation.
+            Feel free to reach out.
+          </p>
 
-              <div className="flex items-center justify-center gap-4 flex-wrap mb-10">
-                {LINKS.map(({ icon: Icon, label, href }) => (
-                  <a
-                    key={label}
-                    href={href}
-                    target={href.startsWith('mailto') ? undefined : '_blank'}
-                    rel={href.startsWith('mailto') ? undefined : 'noopener noreferrer'}
-                    className="flex flex-col items-center gap-2 p-5 border border-border rounded-lg text-muted hover:border-accent hover:text-accent transition-all duration-200 min-w-[100px]"
-                    aria-label={label}
-                  >
-                    <Icon size={22} />
-                    <span className="font-mono text-xs">{label}</span>
-                  </a>
-                ))}
-              </div>
-
+          <div className="flex items-center justify-center gap-4 flex-wrap mb-10">
+            {LINKS.map(({ icon: Icon, label, href }) => (
               <a
-                href={`mailto:${personal.email}`}
-                className="font-mono text-sm text-muted hover:text-accent transition-colors duration-200 underline underline-offset-4 decoration-muted hover:decoration-accent"
+                key={label}
+                href={href}
+                target={href.startsWith('mailto') ? undefined : '_blank'}
+                rel={href.startsWith('mailto') ? undefined : 'noopener noreferrer'}
+                className="flex flex-col items-center gap-2 p-5 border border-border rounded-lg text-muted hover:border-accent hover:text-accent transition-all duration-200 min-w-[100px]"
+                aria-label={label}
               >
-                {personal.email}
+                <Icon size={22} />
+                <span className="font-mono text-xs">{label}</span>
               </a>
-            </motion.div>
+            ))}
           </div>
+
+          <a
+            href={`mailto:${personal.email}`}
+            className="font-mono text-sm text-muted hover:text-accent transition-colors duration-200 underline underline-offset-4 decoration-muted hover:decoration-accent"
+          >
+            {personal.email}
+          </a>
         </div>
       </section>
 

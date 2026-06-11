@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion'
-import { useScrollAnimation } from '../hooks/useScrollAnimation'
+import SectionHeader from './SectionHeader'
 import { listening } from '../data/content'
 
 function AppleMusicIcon({ size = 14 }) {
@@ -28,6 +28,8 @@ function TrackCard({ track, index }) {
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.4, delay: index * 0.06, ease: 'easeOut' }}
+      whileHover={{ y: -4, transition: { duration: 0.2, delay: 0 } }}
+      style={{ willChange: 'transform' }}
     >
       <div className="relative aspect-square overflow-hidden rounded-lg border border-border group-hover:border-accent/50 transition-colors duration-200">
         <img
@@ -54,22 +56,14 @@ function TrackCard({ track, index }) {
 }
 
 export default function Listening() {
-  const animation = useScrollAnimation()
-
   return (
     <section id="listening" className="py-24 md:py-32 px-6 scroll-mt-20">
       <div className="max-w-6xl mx-auto">
-        <div ref={animation.ref}>
-          <motion.div initial={animation.initial} animate={animation.animate} transition={animation.transition}>
-            <p className="font-mono text-accent text-sm mb-2">// 06</p>
-            <h2 className="text-3xl md:text-4xl font-bold text-text mb-12">What I'm Listening To</h2>
-          </motion.div>
-
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-5">
-            {listening.map((track, i) => (
-              <TrackCard key={track.url} track={track} index={i} />
-            ))}
-          </div>
+        <SectionHeader number="// 06" title="What I'm Listening To" />
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-5">
+          {listening.map((track, i) => (
+            <TrackCard key={track.url} track={track} index={i} />
+          ))}
         </div>
       </div>
     </section>

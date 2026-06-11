@@ -1,6 +1,6 @@
 import { motion } from 'framer-motion'
 import { ExternalLink } from 'lucide-react'
-import { useScrollAnimation } from '../hooks/useScrollAnimation'
+import SectionHeader from './SectionHeader'
 import { films } from '../data/content'
 
 function FilmCard({ film, index }) {
@@ -10,6 +10,8 @@ function FilmCard({ film, index }) {
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.4, delay: index * 0.1, ease: 'easeOut' }}
+      whileHover={{ y: -5, boxShadow: '0 0 28px rgba(168, 85, 247, 0.22)', transition: { duration: 0.2, delay: 0 } }}
+      style={{ willChange: 'transform' }}
     >
       {film.src ? (
         <video className="w-full" controls preload="metadata" playsInline>
@@ -53,22 +55,14 @@ function FilmCard({ film, index }) {
 }
 
 export default function Films() {
-  const animation = useScrollAnimation()
-
   return (
     <section id="films" className="py-24 md:py-32 px-6 scroll-mt-20 bg-surface/30">
       <div className="max-w-6xl mx-auto">
-        <div ref={animation.ref}>
-          <motion.div initial={animation.initial} animate={animation.animate} transition={animation.transition}>
-            <p className="font-mono text-accent text-sm mb-2">// 05</p>
-            <h2 className="text-3xl md:text-4xl font-bold text-text mb-12">Films</h2>
-          </motion.div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            {films.map((film, i) => (
-              <FilmCard key={film.title} film={film} index={i} />
-            ))}
-          </div>
+        <SectionHeader number="// 05" title="Films" />
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+          {films.map((film, i) => (
+            <FilmCard key={film.title} film={film} index={i} />
+          ))}
         </div>
       </div>
     </section>

@@ -188,6 +188,8 @@ export const gallery = [
     slug: 'misc',
     photos: [
       { src: '/gallery/cityscape.jpg', alt: 'Barcelona' },
+      { src: '/gallery/IMG_4231.JPG', alt: 'Bray, Ireland' },
+      { src: '/gallery/IMG_2342.JPG', alt: 'Cambridge, MA' },
       { src: '/gallery/street-poet.jpg', alt: '' },
       { src: '/gallery/squirrel.jpg', alt: '' },
       { src: '/gallery/asphalt.jpg', alt: '' },

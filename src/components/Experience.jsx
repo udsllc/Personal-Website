@@ -1,6 +1,6 @@
 import { motion } from 'framer-motion'
 import { Briefcase, GraduationCap, Users } from 'lucide-react'
-import { useScrollAnimation } from '../hooks/useScrollAnimation'
+import SectionHeader from './SectionHeader'
 import { workExperience, education, affiliations } from '../data/content'
 
 function TimelineEntry({ entry, index, Icon }) {
@@ -58,20 +58,29 @@ function SubSection({ label, entries, Icon, animationDelay = 0 }) {
 }
 
 export default function Experience() {
-  const animation = useScrollAnimation()
-
   return (
     <section id="experience" className="py-24 md:py-32 px-6 scroll-mt-20 bg-surface/30">
       <div className="max-w-3xl mx-auto">
-        <div ref={animation.ref}>
-          <motion.div initial={animation.initial} animate={animation.animate} transition={animation.transition}>
-            <p className="font-mono text-accent text-sm mb-2">// 02</p>
-            <h2 className="text-3xl md:text-4xl font-bold text-text mb-12">Background</h2>
-          </motion.div>
-
-          <SubSection label="Experience" entries={workExperience} Icon={Briefcase} animationDelay={0} />
-          <SubSection label="Education" entries={education} Icon={GraduationCap} animationDelay={3} />
-          <SubSection label="Affiliations" entries={affiliations} Icon={Users} animationDelay={5} />
+        <SectionHeader number="// 02" title="Background" />
+        <SubSection label="Experience" entries={workExperience} Icon={Briefcase} animationDelay={0} />
+        <SubSection label="Education" entries={education} Icon={GraduationCap} animationDelay={3} />
+        <div className="mb-12">
+          <h3 className="font-mono text-muted text-xs tracking-widest uppercase mb-6 flex items-center gap-2">
+            <Users size={13} className="text-accent" />
+            Affiliations
+          </h3>
+          <ol className="space-y-3">
+            {affiliations.map((a, i) => (
+              <li key={i} className="flex gap-4 text-sm">
+                <span className="font-mono text-accent shrink-0">{i + 1}.</span>
+                <span>
+                  <span className="text-text font-medium">{a.org}</span>
+                  <span className="text-muted"> — {a.title}</span>
+                  <span className="font-mono text-muted text-xs ml-2">({a.date})</span>
+                </span>
+              </li>
+            ))}
+          </ol>
         </div>
       </div>
     </section>

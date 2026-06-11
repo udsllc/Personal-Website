@@ -1,6 +1,13 @@
+import { motion } from 'framer-motion'
 import { ChevronDown } from 'lucide-react'
 import TerminalTyper from './TerminalTyper'
 import { personal, typingPhrases } from '../data/content'
+
+const fadeUp = (delay) => ({
+  initial: { opacity: 0, y: 20 },
+  animate: { opacity: 1, y: 0 },
+  transition: { duration: 0.6, delay, ease: 'easeOut' },
+})
 
 export default function Hero() {
   const scrollTo = (href) => {
@@ -23,28 +30,42 @@ export default function Hero() {
         }}
       />
 
+      {/* Aurora blobs */}
+      <motion.div
+        className="absolute top-1/4 left-1/4 w-96 h-96 rounded-full blur-3xl pointer-events-none"
+        style={{ background: 'rgba(168,85,247,0.12)' }}
+        animate={{ x: [0, 40, 0], y: [0, -25, 0], scale: [1, 1.15, 1] }}
+        transition={{ duration: 9, repeat: Infinity, repeatType: 'reverse', ease: 'easeInOut' }}
+      />
+      <motion.div
+        className="absolute bottom-1/4 right-1/4 w-80 h-80 rounded-full blur-3xl pointer-events-none"
+        style={{ background: 'rgba(107,33,168,0.12)' }}
+        animate={{ x: [0, -30, 0], y: [0, 20, 0], scale: [1, 0.88, 1] }}
+        transition={{ duration: 11, repeat: Infinity, repeatType: 'reverse', ease: 'easeInOut', delay: 3 }}
+      />
+
       {/* Content — two column on desktop, stacked on mobile */}
       <div className="relative z-10 w-full max-w-5xl mx-auto flex flex-col-reverse md:flex-row items-center justify-center gap-12 md:gap-16">
 
         {/* Left: text */}
         <div className="flex-1 text-center md:text-left">
-          <p className="font-mono text-muted text-sm mb-4 tracking-widest">
+          <motion.p {...fadeUp(0.1)} className="font-mono text-muted text-sm mb-4 tracking-widest">
             // hello, world
-          </p>
+          </motion.p>
 
-          <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold text-text mb-4 tracking-tight">
+          <motion.h1 {...fadeUp(0.25)} className="text-5xl md:text-6xl lg:text-7xl font-bold text-text mb-4 tracking-tight">
             {personal.name}
-          </h1>
+          </motion.h1>
 
-          <div className="text-xl md:text-2xl mb-6 h-8 flex items-center md:justify-start justify-center">
+          <motion.div {...fadeUp(0.4)} className="text-xl md:text-2xl mb-6 h-8 flex items-center md:justify-start justify-center">
             <TerminalTyper phrases={typingPhrases} />
-          </div>
+          </motion.div>
 
-          <p className="text-muted text-base md:text-lg mb-10 max-w-xl leading-relaxed">
+          <motion.p {...fadeUp(0.55)} className="text-muted text-base md:text-lg mb-10 max-w-xl leading-relaxed">
             {personal.tagline}
-          </p>
+          </motion.p>
 
-          <div className="flex items-center md:justify-start justify-center gap-4 flex-wrap">
+          <motion.div {...fadeUp(0.7)} className="flex items-center md:justify-start justify-center gap-4 flex-wrap">
             <button
               onClick={() => scrollTo('#projects')}
               className="bg-accent text-bg font-mono font-medium px-6 py-3 rounded-lg hover:bg-accent-dim transition-colors duration-200 text-sm"
@@ -57,11 +78,11 @@ export default function Hero() {
             >
               Get In Touch
             </button>
-          </div>
+          </motion.div>
         </div>
 
         {/* Right: headshot */}
-        <div className="shrink-0 flex items-center justify-center">
+        <motion.div {...fadeUp(0.15)} className="shrink-0 flex items-center justify-center">
           <div className="relative">
             {/* Purple glow ring */}
             <div
@@ -79,7 +100,7 @@ export default function Hero() {
               </div>
             </div>
           </div>
-        </div>
+        </motion.div>
 
       </div>
 

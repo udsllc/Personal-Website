@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { Menu, X } from 'lucide-react'
+import { motion, AnimatePresence } from 'framer-motion'
 import { personal } from '../data/content'
 
 const NAV_LINKS = [
@@ -50,10 +50,13 @@ export default function NavBar() {
   }
 
   return (
-    <header
-      className={`fixed top-0 inset-x-0 z-50 transition-all duration-300 ${
+    <motion.header
+      className={`fixed top-0 inset-x-0 z-50 transition-colors duration-300 ${
         scrolled ? 'border-b border-border bg-bg/90 backdrop-blur-sm' : 'bg-transparent'
       }`}
+      initial={{ y: -80, opacity: 0 }}
+      animate={{ y: 0, opacity: 1 }}
+      transition={{ duration: 0.5, ease: 'easeOut' }}
     >
       <nav className="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
         <a
@@ -92,28 +95,52 @@ export default function NavBar() {
           aria-label={isOpen ? 'Close menu' : 'Open menu'}
           aria-expanded={isOpen}
         >
-          {isOpen ? <X size={20} /> : <Menu size={20} />}
+          <div className="flex flex-col justify-center gap-[5px] w-5 h-5">
+            <motion.span
+              className="block h-px bg-current rounded"
+              animate={isOpen ? { rotate: 45, y: 6 } : { rotate: 0, y: 0 }}
+              transition={{ duration: 0.2 }}
+            />
+            <motion.span
+              className="block h-px bg-current rounded"
+              animate={isOpen ? { opacity: 0, x: -8 } : { opacity: 1, x: 0 }}
+              transition={{ duration: 0.15 }}
+            />
+            <motion.span
+              className="block h-px bg-current rounded"
+              animate={isOpen ? { rotate: -45, y: -6 } : { rotate: 0, y: 0 }}
+              transition={{ duration: 0.2 }}
+            />
+          </div>
         </button>
       </nav>
 
       {/* Mobile dropdown */}
-      {isOpen && (
-        <div className="md:hidden border-t border-border bg-surface px-6 py-4">
-          <ul className="flex flex-col gap-4">
-            {NAV_LINKS.map(({ label, href }) => (
-              <li key={href}>
-                <a
-                  href={href}
-                  onClick={(e) => { e.preventDefault(); handleNavClick(href) }}
-                  className="text-sm text-muted hover:text-accent transition-colors"
-                >
-                  {label}
-                </a>
-              </li>
-            ))}
-          </ul>
-        </div>
-      )}
-    </header>
+      <AnimatePresence>
+        {isOpen && (
+          <motion.div
+            className="md:hidden border-t border-border bg-surface"
+            initial={{ opacity: 0, y: -8 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -8 }}
+            transition={{ duration: 0.15, ease: 'easeOut' }}
+          >
+            <ul className="px-6 py-4 flex flex-col gap-4">
+              {NAV_LINKS.map(({ label, href }) => (
+                <li key={href}>
+                  <a
+                    href={href}
+                    onClick={(e) => { e.preventDefault(); handleNavClick(href) }}
+                    className="text-sm text-muted hover:text-accent transition-colors"
+                  >
+                    {label}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </motion.header>
   )
 }

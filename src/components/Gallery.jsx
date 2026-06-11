@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { X, ChevronLeft, ChevronRight } from 'lucide-react'
-import { useScrollAnimation } from '../hooks/useScrollAnimation'
+import SectionHeader from './SectionHeader'
 import { gallery } from '../data/content'
 
 function Lightbox({ images, startIndex, onClose }) {
@@ -80,7 +80,6 @@ function Lightbox({ images, startIndex, onClose }) {
 }
 
 export default function Gallery() {
-  const animation = useScrollAnimation()
   const [activeSlug, setActiveSlug] = useState(gallery[0]?.slug)
   const [lightboxIndex, setLightboxIndex] = useState(null)
 
@@ -98,61 +97,56 @@ export default function Gallery() {
   return (
     <section id="gallery" className="py-24 md:py-32 px-6 scroll-mt-20">
       <div className="max-w-6xl mx-auto">
-        <div ref={animation.ref}>
-          <motion.div initial={animation.initial} animate={animation.animate} transition={animation.transition}>
-            <p className="font-mono text-accent text-sm mb-2">// 04</p>
-            <h2 className="text-3xl md:text-4xl font-bold text-text mb-8">Gallery</h2>
+        <SectionHeader number="// 04" title="Gallery" className="mb-8" />
+
+        {gallery.length > 1 && (
+          <div className="flex gap-1 mb-8 border-b border-border">
+            {gallery.map((col) => (
+              <button
+                key={col.slug}
+                onClick={() => { setActiveSlug(col.slug); setLightboxIndex(null) }}
+                className={`font-mono text-sm px-4 py-2 border-b-2 -mb-px transition-colors duration-200 ${
+                  activeSlug === col.slug
+                    ? 'border-accent text-accent'
+                    : 'border-transparent text-muted hover:text-text'
+                }`}
+              >
+                {col.name ?? '—'}
+              </button>
+            ))}
+          </div>
+        )}
+
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={activeSlug}
+            className="columns-2 md:columns-3 gap-4 space-y-4"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.2 }}
+          >
+            {activeCollection.photos.map((photo, i) => (
+              <div
+                key={photo.src}
+                className="break-inside-avoid overflow-hidden rounded-lg border border-border cursor-pointer group"
+                onClick={() => setLightboxIndex(i)}
+              >
+                <img
+                  src={photo.src}
+                  alt={photo.alt}
+                  className="w-full object-cover group-hover:scale-105 transition-transform duration-300"
+                  loading="lazy"
+                />
+                {photo.alt && (
+                  <p className="font-mono text-xs text-muted px-3 py-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+                    {photo.alt}
+                  </p>
+                )}
+              </div>
+            ))}
           </motion.div>
-
-          {gallery.length > 1 && (
-            <div className="flex gap-1 mb-8 border-b border-border">
-              {gallery.map((col) => (
-                <button
-                  key={col.slug}
-                  onClick={() => { setActiveSlug(col.slug); setLightboxIndex(null) }}
-                  className={`font-mono text-sm px-4 py-2 border-b-2 -mb-px transition-colors duration-200 ${
-                    activeSlug === col.slug
-                      ? 'border-accent text-accent'
-                      : 'border-transparent text-muted hover:text-text'
-                  }`}
-                >
-                  {col.name ?? '—'}
-                </button>
-              ))}
-            </div>
-          )}
-
-          <AnimatePresence mode="wait">
-            <motion.div
-              key={activeSlug}
-              className="columns-2 md:columns-3 gap-4 space-y-4"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 0.2 }}
-            >
-              {activeCollection.photos.map((photo, i) => (
-                <div
-                  key={photo.src}
-                  className="break-inside-avoid overflow-hidden rounded-lg border border-border cursor-pointer group"
-                  onClick={() => setLightboxIndex(i)}
-                >
-                  <img
-                    src={photo.src}
-                    alt={photo.alt}
-                    className="w-full object-cover group-hover:scale-105 transition-transform duration-300"
-                    loading="lazy"
-                  />
-                  {photo.alt && (
-                    <p className="font-mono text-xs text-muted px-3 py-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
-                      {photo.alt}
-                    </p>
-                  )}
-                </div>
-              ))}
-            </motion.div>
-          </AnimatePresence>
-        </div>
+        </AnimatePresence>
       </div>
 
       <AnimatePresence>

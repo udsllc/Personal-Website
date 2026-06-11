@@ -1,5 +1,7 @@
 import { motion } from 'framer-motion'
 import { ExternalLink } from 'lucide-react'
+import SectionHeader from './SectionHeader'
+import { projects } from '../data/content'
 
 function GithubIcon({ size = 18 }) {
   return (
@@ -8,8 +10,6 @@ function GithubIcon({ size = 18 }) {
     </svg>
   )
 }
-import { useScrollAnimation } from '../hooks/useScrollAnimation'
-import { projects } from '../data/content'
 
 function ProjectCard({ project, index }) {
   return (
@@ -20,6 +20,8 @@ function ProjectCard({ project, index }) {
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.4, delay: index * 0.1, ease: 'easeOut' }}
+      whileHover={{ y: -5, boxShadow: '0 0 28px rgba(168, 85, 247, 0.22)', transition: { duration: 0.2, delay: 0 } }}
+      style={{ willChange: 'transform' }}
     >
       <div className="flex items-start justify-between gap-4 mb-3">
         <h3 className="font-mono font-semibold text-text group-hover:text-accent transition-colors duration-200">
@@ -68,22 +70,14 @@ function ProjectCard({ project, index }) {
 }
 
 export default function Projects() {
-  const animation = useScrollAnimation()
-
   return (
     <section id="projects" className="py-24 md:py-32 px-6 scroll-mt-20">
       <div className="max-w-6xl mx-auto">
-        <div ref={animation.ref}>
-          <motion.div initial={animation.initial} animate={animation.animate} transition={animation.transition}>
-            <p className="font-mono text-accent text-sm mb-2">// 03</p>
-            <h2 className="text-3xl md:text-4xl font-bold text-text mb-12">Code</h2>
-          </motion.div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {projects.map((project, i) => (
-              <ProjectCard key={project.name} project={project} index={i} />
-            ))}
-          </div>
+        <SectionHeader number="// 03" title="Code" />
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {projects.map((project, i) => (
+            <ProjectCard key={project.name} project={project} index={i} />
+          ))}
         </div>
       </div>
     </section>
